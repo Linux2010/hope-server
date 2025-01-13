@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ChannelInfoMapper">
+    
+    <resultMap type="ChannelInfo" id="ChannelInfoResult">
+        <result property="channelId"    column="channel_id"    />
+        <result property="channelName"    column="channel_name"    />
+        <result property="channelType"    column="channel_type"    />
+        <result property="channelOffOn"    column="channel_off_on"    />
+        <result property="cookieEnable"    column="cookie_enable"    />
+        <result property="cookieJson"    column="cookie_json"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="username"    column="username"    />
+        <result property="password"    column="password"    />
+        <result property="phone"    column="phone"    />
+        <result property="loginUrl"    column="login_url"    />
+        <result property="homeUrl"    column="home_url"    />
+        <result property="email"    column="email"    />
+        <result property="assistEmail"    column="assist_email"    />
+        <result property="channelDesc"    column="channel_desc"    />
+        <result property="channelUrl"    column="channel_url"    />
+        <result property="cookieDomain"    column="cookie_domain"    />
+        <result property="dayMax"    column="day_max"    />
+        <result property="titleLimit"    column="title_limit"    />
+        <result property="engineId"    column="engine_id"    />
+        <result property="gainStatus"    column="gain_status"    />
+        <result property="accDue"    column="acc_due"    />
+        <result property="channelDetailJson"    column="channel_detail_json"    />
+        <result property="processStatus"    column="process_status"    />
+    </resultMap>
+
+    <sql id="selectChannelInfoVo">
+        select channel_id, channel_name, channel_type, channel_off_on, cookie_enable, cookie_json, create_time, modify_time, username, password, phone, login_url, home_url, email, assist_email, channel_desc, channel_url, cookie_domain, day_max, title_limit, engine_id, gain_status, acc_due, channel_detail_json, process_status from channel_info
+    </sql>
+
+    <select id="selectChannelInfoList" parameterType="ChannelInfo" resultMap="ChannelInfoResult">
+        <include refid="selectChannelInfoVo"/>
+        <where>  
+            <if test="channelName != null  and channelName != ''"> and channel_name like concat('%', #{channelName}, '%')</if>
+            <if test="channelType != null  and channelType != ''"> and channel_type = #{channelType}</if>
+            <if test="channelOffOn != null  and channelOffOn != ''"> and channel_off_on = #{channelOffOn}</if>
+            <if test="cookieEnable != null  and cookieEnable != ''"> and cookie_enable = #{cookieEnable}</if>
+            <if test="cookieJson != null  and cookieJson != ''"> and cookie_json = #{cookieJson}</if>
+            <if test="modifyTime != null "> and modify_time = #{modifyTime}</if>
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="loginUrl != null  and loginUrl != ''"> and login_url = #{loginUrl}</if>
+            <if test="homeUrl != null  and homeUrl != ''"> and home_url = #{homeUrl}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="assistEmail != null  and assistEmail != ''"> and assist_email = #{assistEmail}</if>
+            <if test="channelDesc != null  and channelDesc != ''"> and channel_desc = #{channelDesc}</if>
+            <if test="channelUrl != null  and channelUrl != ''"> and channel_url = #{channelUrl}</if>
+            <if test="cookieDomain != null  and cookieDomain != ''"> and cookie_domain = #{cookieDomain}</if>
+            <if test="dayMax != null  and dayMax != ''"> and day_max = #{dayMax}</if>
+            <if test="titleLimit != null  and titleLimit != ''"> and title_limit = #{titleLimit}</if>
+            <if test="engineId != null "> and engine_id = #{engineId}</if>
+            <if test="gainStatus != null  and gainStatus != ''"> and gain_status = #{gainStatus}</if>
+            <if test="accDue != null "> and acc_due = #{accDue}</if>
+            <if test="channelDetailJson != null  and channelDetailJson != ''"> and channel_detail_json = #{channelDetailJson}</if>
+            <if test="processStatus != null "> and process_status = #{processStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectChannelInfoByChannelId" parameterType="Long" resultMap="ChannelInfoResult">
+        <include refid="selectChannelInfoVo"/>
+        where channel_id = #{channelId}
+    </select>
+
+    <insert id="insertChannelInfo" parameterType="ChannelInfo" useGeneratedKeys="true" keyProperty="channelId">
+        insert into channel_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelName != null">channel_name,</if>
+            <if test="channelType != null">channel_type,</if>
+            <if test="channelOffOn != null">channel_off_on,</if>
+            <if test="cookieEnable != null">cookie_enable,</if>
+            <if test="cookieJson != null">cookie_json,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="modifyTime != null">modify_time,</if>
+            <if test="username != null">username,</if>
+            <if test="password != null">password,</if>
+            <if test="phone != null">phone,</if>
+            <if test="loginUrl != null">login_url,</if>
+            <if test="homeUrl != null">home_url,</if>
+            <if test="email != null">email,</if>
+            <if test="assistEmail != null">assist_email,</if>
+            <if test="channelDesc != null">channel_desc,</if>
+            <if test="channelUrl != null">channel_url,</if>
+            <if test="cookieDomain != null">cookie_domain,</if>
+            <if test="dayMax != null">day_max,</if>
+            <if test="titleLimit != null">title_limit,</if>
+            <if test="engineId != null">engine_id,</if>
+            <if test="gainStatus != null">gain_status,</if>
+            <if test="accDue != null">acc_due,</if>
+            <if test="channelDetailJson != null">channel_detail_json,</if>
+            <if test="processStatus != null">process_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelName != null">#{channelName},</if>
+            <if test="channelType != null">#{channelType},</if>
+            <if test="channelOffOn != null">#{channelOffOn},</if>
+            <if test="cookieEnable != null">#{cookieEnable},</if>
+            <if test="cookieJson != null">#{cookieJson},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+            <if test="username != null">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="loginUrl != null">#{loginUrl},</if>
+            <if test="homeUrl != null">#{homeUrl},</if>
+            <if test="email != null">#{email},</if>
+            <if test="assistEmail != null">#{assistEmail},</if>
+            <if test="channelDesc != null">#{channelDesc},</if>
+            <if test="channelUrl != null">#{channelUrl},</if>
+            <if test="cookieDomain != null">#{cookieDomain},</if>
+            <if test="dayMax != null">#{dayMax},</if>
+            <if test="titleLimit != null">#{titleLimit},</if>
+            <if test="engineId != null">#{engineId},</if>
+            <if test="gainStatus != null">#{gainStatus},</if>
+            <if test="accDue != null">#{accDue},</if>
+            <if test="channelDetailJson != null">#{channelDetailJson},</if>
+            <if test="processStatus != null">#{processStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateChannelInfo" parameterType="ChannelInfo">
+        update channel_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="channelName != null">channel_name = #{channelName},</if>
+            <if test="channelType != null">channel_type = #{channelType},</if>
+            <if test="channelOffOn != null">channel_off_on = #{channelOffOn},</if>
+            <if test="cookieEnable != null">cookie_enable = #{cookieEnable},</if>
+            <if test="cookieJson != null">cookie_json = #{cookieJson},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="loginUrl != null">login_url = #{loginUrl},</if>
+            <if test="homeUrl != null">home_url = #{homeUrl},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="assistEmail != null">assist_email = #{assistEmail},</if>
+            <if test="channelDesc != null">channel_desc = #{channelDesc},</if>
+            <if test="channelUrl != null">channel_url = #{channelUrl},</if>
+            <if test="cookieDomain != null">cookie_domain = #{cookieDomain},</if>
+            <if test="dayMax != null">day_max = #{dayMax},</if>
+            <if test="titleLimit != null">title_limit = #{titleLimit},</if>
+            <if test="engineId != null">engine_id = #{engineId},</if>
+            <if test="gainStatus != null">gain_status = #{gainStatus},</if>
+            <if test="accDue != null">acc_due = #{accDue},</if>
+            <if test="channelDetailJson != null">channel_detail_json = #{channelDetailJson},</if>
+            <if test="processStatus != null">process_status = #{processStatus},</if>
+        </trim>
+        where channel_id = #{channelId}
+    </update>
+
+    <delete id="deleteChannelInfoByChannelId" parameterType="Long">
+        delete from channel_info where channel_id = #{channelId}
+    </delete>
+
+    <delete id="deleteChannelInfoByChannelIds" parameterType="String">
+        delete from channel_info where channel_id in 
+        <foreach item="channelId" collection="array" open="(" separator="," close=")">
+            #{channelId}
+        </foreach>
+    </delete>
+</mapper>
