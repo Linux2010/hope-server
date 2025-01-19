@@ -1,26 +1,29 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item prop="channelType">
+        <el-select v-model="queryParams.channelType" placeholder="请选择频道类型" clearable @change="handleQuery">
+          <el-option label="油管" value="youtube"></el-option>
+          <el-option label="B站" value="bili"></el-option>
+          <el-option label="头条" value="xigua"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="channelOffOn">
+        <el-select v-model="queryParams.channelOffOn" placeholder="请选择开关状态" clearable @change="handleQuery">
+          <el-option label="关闭" value="off"></el-option>
+          <el-option label="开启" value="on"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="cookieEnable">
+        <el-select v-model="queryParams.cookieEnable" placeholder="请选择预警状态" clearable @change="handleQuery">
+          <el-option label="正常" value="true">正常</el-option>
+          <el-option label="报警" value="false">报警</el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item  prop="channelName">
         <el-input
           v-model="queryParams.channelName"
           placeholder="请输入频道名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item  prop="channelOffOn">
-        <el-input
-          v-model="queryParams.channelOffOn"
-          placeholder="请输入开关状态"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item  prop="cookieEnable">
-        <el-input
-          v-model="queryParams.cookieEnable"
-          placeholder="请输入cookie"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -138,7 +141,7 @@
 
     <!-- 添加或修改【请填写功能名称】对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px" :style="formStyle">
+      <el-form ref="form" :model="form" :rules="rules" label-width="160px" >
         <el-form-item label="频道名称" prop="channelName">
           <el-input v-model="form.channelName" placeholder="请输入频道名称" />
         </el-form-item>
@@ -194,19 +197,13 @@
         <el-form-item label="title上限" prop="titleLimit">
           <el-input v-model="form.titleLimit" placeholder="请输入title上限" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="engineId">
-          <el-input v-model="form.engineId" placeholder="请输入${comment}" />
-        </el-form-item>
-        <el-form-item label="${comment}" prop="accDue">
+        <el-form-item label="accDue" prop="accDue">
           <el-date-picker clearable
             v-model="form.accDue"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="请选择${comment}">
           </el-date-picker>
-        </el-form-item>
-        <el-form-item label="channel_detail_json" prop="channelDetailJson">
-          <el-input v-model="form.channelDetailJson" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -401,9 +398,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.my-unique-form.el-form-item {
-  width: 48%;
-  margin-bottom: 10px;
-}
-</style>

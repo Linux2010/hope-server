@@ -1,15 +1,17 @@
-package com.ruoyi.system.service;
+package com.ruoyi.system.mapper;
 
-import java.util.List;
+
 import com.ruoyi.system.domain.ChannelInfo;
 
+import java.util.List;
+
 /**
- * 【请填写功能名称】Service接口
+ * 【请填写功能名称】Mapper接口
  * 
  * @author ruoyi
  * @date 2025-01-11
  */
-public interface IChannelInfoService 
+public interface ChannelInfoMapper 
 {
     /**
      * 查询【请填写功能名称】
@@ -44,18 +46,18 @@ public interface IChannelInfoService
     public int updateChannelInfo(ChannelInfo channelInfo);
 
     /**
-     * 批量删除【请填写功能名称】
-     * 
-     * @param channelIds 需要删除的【请填写功能名称】主键集合
-     * @return 结果
-     */
-    public int deleteChannelInfoByChannelIds(Long[] channelIds);
-
-    /**
-     * 删除【请填写功能名称】信息
+     * 删除【请填写功能名称】
      * 
      * @param channelId 【请填写功能名称】主键
      * @return 结果
      */
     public int deleteChannelInfoByChannelId(Long channelId);
+
+    /**
+     * 批量删除【请填写功能名称】
+     * 
+     * @param channelIds 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int deleteChannelInfoByChannelIds(Long[] channelIds);
 }

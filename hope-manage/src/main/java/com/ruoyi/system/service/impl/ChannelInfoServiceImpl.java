@@ -1,12 +1,13 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.system.domain.ChannelInfo;
+import com.ruoyi.system.mapper.ChannelInfoMapper;
+import com.ruoyi.system.service.IChannelInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.ChannelInfoMapper;
-import com.ruoyi.system.domain.ChannelInfo;
-import com.ruoyi.system.service.IChannelInfoService;
+
+import java.util.List;
 
 /**
  * 【请填写功能名称】Service业务层处理
@@ -15,7 +16,7 @@ import com.ruoyi.system.service.IChannelInfoService;
  * @date 2025-01-11
  */
 @Service
-public class ChannelInfoServiceImpl implements IChannelInfoService 
+public class ChannelInfoServiceImpl implements IChannelInfoService
 {
     @Autowired
     private ChannelInfoMapper channelInfoMapper;
