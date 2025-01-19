@@ -90,18 +90,30 @@
 
     <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="引擎" align="center" prop="engineId" />
-      <el-table-column label="名称" align="center" prop="channelName" />
-      <el-table-column label="类型" align="center" prop="channelType" />
-      <el-table-column label="开关" align="center" prop="channelOffOn" />
-      <el-table-column label="cookie" align="center" prop="cookieEnable" />
+      <el-table-column label="引擎" align="center" prop="engineId"  width="90" />
+      <el-table-column label="名称" align="center" prop="channelName"  width="160"/>
+      <el-table-column label="盈利" align="center" prop="gainStatus"  width="90" >
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.hope_gain_status" :value="scope.row.gainStatus"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="类型" align="center" prop="channelType"  width="90" />
+      <el-table-column label="开关" align="center" prop="channelOffOn" width="90" >
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.hope_channel_off_on" :value="scope.row.channelOffOn"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="cookie" align="center" prop="cookieEnable" width="90">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.hope_cookie_enable" :value="scope.row.cookieEnable"/>
+        </template>
+      </el-table-column>
       <el-table-column label="修改时间" align="center" prop="modifyTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.modifyTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="手机" align="center" prop="phone" />
-      <el-table-column label="盈利" align="center" prop="gainStatus" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
 
         <template slot-scope="scope">
@@ -143,7 +155,7 @@
     <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="160px" >
         <el-form-item label="频道名称" prop="channelName">
-          <el-input v-model="form.channelName" placeholder="请输入频道名称" />
+          <el-input v-model="form.channelName" placeholder="请输入频道名称" disabled/>
         </el-form-item>
         <el-form-item label="开关" prop="channelOffOn">
           <el-input v-model="form.channelOffOn" placeholder="请输入开关" />
@@ -188,11 +200,8 @@
         <el-form-item label="channelUrl" prop="channelUrl">
           <el-input v-model="form.channelUrl" type="textarea" placeholder="请输入channelUrl" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="cookieDomain">
-          <el-input v-model="form.cookieDomain" placeholder="请输入${comment}" />
-        </el-form-item>
-        <el-form-item label="${comment}" prop="dayMax">
-          <el-input v-model="form.dayMax" placeholder="请输入${comment}" />
+        <el-form-item label="单日上限" prop="dayMax">
+          <el-input v-model="form.dayMax" placeholder="请输入单日上限" />
         </el-form-item>
         <el-form-item label="title上限" prop="titleLimit">
           <el-input v-model="form.titleLimit" placeholder="请输入title上限" />
@@ -219,6 +228,7 @@ import { listInfo, getInfo, delInfo, addInfo, updateInfo } from "@/api/system/ch
 
 export default {
   name: "Info",
+  dicts: ['hope_channel_off_on', 'hope_cookie_enable', 'hope_gain_status'],
   data() {
     return {
       // 遮罩层
