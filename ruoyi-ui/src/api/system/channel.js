@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询【请填写功能名称】列表
+// 查询【下载管理】列表
 export function listInfo(query) {
   return request({
     url: '/system/channel/list',
@@ -9,7 +9,7 @@ export function listInfo(query) {
   })
 }
 
-// 查询【请填写功能名称】详细
+// 查询【下载管理】详细
 export function getInfo(channelId) {
   return request({
     url: '/system/channel/' + channelId,
@@ -17,7 +17,7 @@ export function getInfo(channelId) {
   })
 }
 
-// 新增【请填写功能名称】
+// 新增【下载管理】
 export function addInfo(data) {
   return request({
     url: '/system/channel',
@@ -26,7 +26,7 @@ export function addInfo(data) {
   })
 }
 
-// 修改【请填写功能名称】
+// 修改【下载管理】
 export function updateInfo(data) {
   return request({
     url: '/system/channel',
@@ -35,7 +35,7 @@ export function updateInfo(data) {
   })
 }
 
-// 删除【请填写功能名称】
+// 删除【下载管理】
 export function delInfo(channelId) {
   return request({
     url: '/system/channel/' + channelId,

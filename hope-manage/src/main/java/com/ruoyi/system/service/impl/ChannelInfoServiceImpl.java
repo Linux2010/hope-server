@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 【请填写功能名称】Service业务层处理
+ * 【下载管理】Service业务层处理
  * 
  * @author ruoyi
  * @date 2025-01-11
@@ -22,10 +22,10 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
     private ChannelInfoMapper channelInfoMapper;
 
     /**
-     * 查询【请填写功能名称】
+     * 查询【下载管理】
      * 
-     * @param channelId 【请填写功能名称】主键
-     * @return 【请填写功能名称】
+     * @param channelId 【下载管理】主键
+     * @return 【下载管理】
      */
     @Override
     public ChannelInfo selectChannelInfoByChannelId(Long channelId)
@@ -34,10 +34,10 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
     }
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询【下载管理】列表
      * 
-     * @param channelInfo 【请填写功能名称】
-     * @return 【请填写功能名称】
+     * @param channelInfo 【下载管理】
+     * @return 【下载管理】
      */
     @Override
     public List<ChannelInfo> selectChannelInfoList(ChannelInfo channelInfo)
@@ -46,9 +46,9 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增【下载管理】
      * 
-     * @param channelInfo 【请填写功能名称】
+     * @param channelInfo 【下载管理】
      * @return 结果
      */
     @Override
@@ -59,9 +59,9 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改【下载管理】
      * 
-     * @param channelInfo 【请填写功能名称】
+     * @param channelInfo 【下载管理】
      * @return 结果
      */
     @Override
@@ -71,9 +71,9 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
     }
 
     /**
-     * 批量删除【请填写功能名称】
+     * 批量删除【下载管理】
      * 
-     * @param channelIds 需要删除的【请填写功能名称】主键
+     * @param channelIds 需要删除的【下载管理】主键
      * @return 结果
      */
     @Override
@@ -83,9 +83,9 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
     }
 
     /**
-     * 删除【请填写功能名称】信息
+     * 删除【下载管理】信息
      * 
-     * @param channelId 【请填写功能名称】主键
+     * @param channelId 【下载管理】主键
      * @return 结果
      */
     @Override

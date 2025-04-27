@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DownloadInfoMapper">
+    
+    <resultMap type="DownloadInfo" id="DownloadInfoResult">
+        <result property="downloadId"    column="download_id"    />
+        <result property="downloadName"    column="download_name"    />
+        <result property="downloadType"    column="download_type"    />
+        <result property="videoType"    column="video_type"    />
+        <result property="shellPath"    column="shell_path"    />
+        <result property="agent"    column="agent"    />
+        <result property="downloadUrl"    column="download_url"    />
+        <result property="downloadEnable"    column="download_enable"    />
+        <result property="downloadPath"    column="download_path"    />
+        <result property="downloadStart"    column="download_start"    />
+        <result property="downloadEnd"    column="download_end"    />
+        <result property="downloadAllEnd"    column="download_all_end"    />
+        <result property="afterShellPath"    column="after_shell_path"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="downloadDesc"    column="download_desc"    />
+        <result property="engineId"    column="engine_id"    />
+        <result property="cycleType"    column="cycle_type"    />
+        <result property="usedSize"    column="used_size"    />
+        <result property="quality"    column="quality"    />
+        <result property="diskStorageInfo"    column="disk_storage_info"    />
+    </resultMap>
+
+    <sql id="selectDownloadInfoVo">
+        select download_id, download_name, download_type, video_type, shell_path, agent, download_url, download_enable, download_path, download_start, download_end, download_all_end, after_shell_path, modify_time, create_time, download_desc, engine_id, cycle_type, used_size, quality, disk_storage_info from download_info
+    </sql>
+
+    <select id="selectDownloadInfoList" parameterType="DownloadInfo" resultMap="DownloadInfoResult">
+        <include refid="selectDownloadInfoVo"/>
+        <where>  
+            <if test="downloadName != null  and downloadName != ''"> and download_name like concat('%', #{downloadName}, '%')</if>
+            <if test="downloadType != null  and downloadType != ''"> and download_type = #{downloadType}</if>
+            <if test="videoType != null  and videoType != ''"> and video_type = #{videoType}</if>
+            <if test="downloadEnable != null  and downloadEnable != ''"> and download_enable = #{downloadEnable}</if>
+        </where>
+    </select>
+    
+    <select id="selectDownloadInfoByDownloadId" parameterType="Long" resultMap="DownloadInfoResult">
+        <include refid="selectDownloadInfoVo"/>
+        where download_id = #{downloadId}
+    </select>
+
+    <insert id="insertDownloadInfo" parameterType="DownloadInfo" useGeneratedKeys="true" keyProperty="downloadId">
+        insert into download_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="downloadName != null and downloadName != ''">download_name,</if>
+            <if test="downloadType != null and downloadType != ''">download_type,</if>
+            <if test="videoType != null">video_type,</if>
+            <if test="shellPath != null">shell_path,</if>
+            <if test="agent != null">agent,</if>
+            <if test="downloadUrl != null">download_url,</if>
+            <if test="downloadEnable != null">download_enable,</if>
+            <if test="downloadPath != null">download_path,</if>
+            <if test="downloadStart != null">download_start,</if>
+            <if test="downloadEnd != null">download_end,</if>
+            <if test="downloadAllEnd != null">download_all_end,</if>
+            <if test="afterShellPath != null">after_shell_path,</if>
+            <if test="modifyTime != null">modify_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="downloadDesc != null">download_desc,</if>
+            <if test="engineId != null">engine_id,</if>
+            <if test="cycleType != null">cycle_type,</if>
+            <if test="usedSize != null">used_size,</if>
+            <if test="quality != null">quality,</if>
+            <if test="diskStorageInfo != null">disk_storage_info,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="downloadName != null and downloadName != ''">#{downloadName},</if>
+            <if test="downloadType != null and downloadType != ''">#{downloadType},</if>
+            <if test="videoType != null">#{videoType},</if>
+            <if test="shellPath != null">#{shellPath},</if>
+            <if test="agent != null">#{agent},</if>
+            <if test="downloadUrl != null">#{downloadUrl},</if>
+            <if test="downloadEnable != null">#{downloadEnable},</if>
+            <if test="downloadPath != null">#{downloadPath},</if>
+            <if test="downloadStart != null">#{downloadStart},</if>
+            <if test="downloadEnd != null">#{downloadEnd},</if>
+            <if test="downloadAllEnd != null">#{downloadAllEnd},</if>
+            <if test="afterShellPath != null">#{afterShellPath},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="downloadDesc != null">#{downloadDesc},</if>
+            <if test="engineId != null">#{engineId},</if>
+            <if test="cycleType != null">#{cycleType},</if>
+            <if test="usedSize != null">#{usedSize},</if>
+            <if test="quality != null">#{quality},</if>
+            <if test="diskStorageInfo != null">#{diskStorageInfo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDownloadInfo" parameterType="DownloadInfo">
+        update download_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="downloadName != null and downloadName != ''">download_name = #{downloadName},</if>
+            <if test="downloadType != null and downloadType != ''">download_type = #{downloadType},</if>
+            <if test="videoType != null">video_type = #{videoType},</if>
+            <if test="shellPath != null">shell_path = #{shellPath},</if>
+            <if test="agent != null">agent = #{agent},</if>
+            <if test="downloadUrl != null">download_url = #{downloadUrl},</if>
+            <if test="downloadEnable != null">download_enable = #{downloadEnable},</if>
+            <if test="downloadPath != null">download_path = #{downloadPath},</if>
+            <if test="downloadStart != null">download_start = #{downloadStart},</if>
+            <if test="downloadEnd != null">download_end = #{downloadEnd},</if>
+            <if test="downloadAllEnd != null">download_all_end = #{downloadAllEnd},</if>
+            <if test="afterShellPath != null">after_shell_path = #{afterShellPath},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="downloadDesc != null">download_desc = #{downloadDesc},</if>
+            <if test="engineId != null">engine_id = #{engineId},</if>
+            <if test="cycleType != null">cycle_type = #{cycleType},</if>
+            <if test="usedSize != null">used_size = #{usedSize},</if>
+            <if test="quality != null">quality = #{quality},</if>
+            <if test="diskStorageInfo != null">disk_storage_info = #{diskStorageInfo},</if>
+        </trim>
+        where download_id = #{downloadId}
+    </update>
+
+    <delete id="deleteDownloadInfoByDownloadId" parameterType="Long">
+        delete from download_info where download_id = #{downloadId}
+    </delete>
+
+    <delete id="deleteDownloadInfoByDownloadIds" parameterType="String">
+        delete from download_info where download_id in 
+        <foreach item="downloadId" collection="array" open="(" separator="," close=")">
+            #{downloadId}
+        </foreach>
+    </delete>
+</mapper>

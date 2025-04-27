@@ -1,0 +1,44 @@
+import request from '@/utils/request'
+
+// 查询下载管理列表
+export function listDownloadInfo(query) {
+  return request({
+    url: '/system/downloadInfo/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询下载管理详细
+export function getDownloadInfo(downloadId) {
+  return request({
+    url: '/system/downloadInfo/' + downloadId,
+    method: 'get'
+  })
+}
+
+// 新增下载管理
+export function addDownloadInfo(data) {
+  return request({
+    url: '/system/downloadInfo',
+    method: 'post',
+    data: data
+  })
+}
+
+// 修改下载管理
+export function updateDownloadInfo(data) {
+  return request({
+    url: '/system/downloadInfo',
+    method: 'put',
+    data: data
+  })
+}
+
+// 删除下载管理
+export function delDownloadInfo(downloadId) {
+  return request({
+    url: '/system/downloadInfo/' + downloadId,
+    method: 'delete'
+  })
+}

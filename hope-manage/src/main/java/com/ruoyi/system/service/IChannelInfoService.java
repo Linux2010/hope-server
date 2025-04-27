@@ -6,7 +6,7 @@ import com.ruoyi.system.domain.ChannelInfo;
 import java.util.List;
 
 /**
- * 【请填写功能名称】Service接口
+ * 【下载管理】Service接口
  * 
  * @author ruoyi
  * @date 2025-01-11
@@ -14,49 +14,49 @@ import java.util.List;
 public interface IChannelInfoService 
 {
     /**
-     * 查询【请填写功能名称】
+     * 查询【下载管理】
      * 
-     * @param channelId 【请填写功能名称】主键
-     * @return 【请填写功能名称】
+     * @param channelId 【下载管理】主键
+     * @return 【下载管理】
      */
     public ChannelInfo selectChannelInfoByChannelId(Long channelId);
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询【下载管理】列表
      * 
-     * @param channelInfo 【请填写功能名称】
-     * @return 【请填写功能名称】集合
+     * @param channelInfo 【下载管理】
+     * @return 【下载管理】集合
      */
     public List<ChannelInfo> selectChannelInfoList(ChannelInfo channelInfo);
 
     /**
-     * 新增【请填写功能名称】
+     * 新增【下载管理】
      * 
-     * @param channelInfo 【请填写功能名称】
+     * @param channelInfo 【下载管理】
      * @return 结果
      */
     public int insertChannelInfo(ChannelInfo channelInfo);
 
     /**
-     * 修改【请填写功能名称】
+     * 修改【下载管理】
      * 
-     * @param channelInfo 【请填写功能名称】
+     * @param channelInfo 【下载管理】
      * @return 结果
      */
     public int updateChannelInfo(ChannelInfo channelInfo);
 
     /**
-     * 批量删除【请填写功能名称】
+     * 批量删除【下载管理】
      * 
-     * @param channelIds 需要删除的【请填写功能名称】主键集合
+     * @param channelIds 需要删除的【下载管理】主键集合
      * @return 结果
      */
     public int deleteChannelInfoByChannelIds(Long[] channelIds);
 
     /**
-     * 删除【请填写功能名称】信息
+     * 删除【下载管理】信息
      * 
-     * @param channelId 【请填写功能名称】主键
+     * @param channelId 【下载管理】主键
      * @return 结果
      */
     public int deleteChannelInfoByChannelId(Long channelId);

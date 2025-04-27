@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.Date;
 
 /**
- * 【请填写功能名称】对象 channel_info
+ * 【下载管理】对象 channel_info
  * 
  * @author ruoyi
  * @date 2025-01-11
@@ -19,6 +19,12 @@ public class ChannelInfo extends BaseEntity
 
     /** $column.columnComment */
     private Long channelId;
+
+    /** 排序字段 */
+    private String orderByColumn;
+
+    /** 排序方向 */
+    private String isAsc;
 
     /** 频道名称，唯一 */
     @Excel(name = "频道名称，唯一")
@@ -329,10 +335,28 @@ public class ChannelInfo extends BaseEntity
         return processStatus;
     }
 
+    public String getOrderByColumn() {
+        return orderByColumn;
+    }
+
+    public void setOrderByColumn(String orderByColumn) {
+        this.orderByColumn = orderByColumn;
+    }
+
+    public String getIsAsc() {
+        return isAsc;
+    }
+
+    public void setIsAsc(String isAsc) {
+        this.isAsc = isAsc;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("channelId", getChannelId())
+            .append("orderByColumn", getOrderByColumn())
+            .append("isAsc", getIsAsc())
             .append("channelName", getChannelName())
             .append("channelType", getChannelType())
             .append("channelOffOn", getChannelOffOn())
