@@ -42,3 +42,11 @@ export function delDownloadInfo(downloadId) {
     method: 'delete'
   })
 }
+
+// 获取所有引擎信息
+export function listAllEngines() {
+  return request({
+    url: '/system/engineInfo/listAll',
+    method: 'get'
+  })
+}

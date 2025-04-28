@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dayMax"    column="day_max"    />
         <result property="titleLimit"    column="title_limit"    />
         <result property="engineId"    column="engine_id"    />
+        <result property="engineName"    column="engine_name"    />
         <result property="gainStatus"    column="gain_status"    />
         <result property="accDue"    column="acc_due"    />
         <result property="channelDetailJson"    column="channel_detail_json"    />
@@ -33,7 +34,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectChannelInfoVo">
-        select channel_id, channel_name, channel_type, channel_off_on, cookie_enable, cookie_json, create_time, modify_time, username, password, phone, login_url, home_url, email, assist_email, channel_desc, channel_url, cookie_domain, day_max, title_limit, engine_id, gain_status, acc_due, channel_detail_json, process_status from channel_info
+        select c.channel_id, c.channel_name, c.channel_type, c.channel_off_on, c.cookie_enable, c.cookie_json, 
+        c.create_time, c.modify_time, c.username, c.password, c.phone, c.login_url, c.home_url, c.email, 
+        c.assist_email, c.channel_desc, c.channel_url, c.cookie_domain, c.day_max, c.title_limit, 
+        c.engine_id, e.engine_name, c.gain_status, c.acc_due, c.channel_detail_json, c.process_status 
+        from channel_info c
+        left join engine_info e on c.engine_id = e.engine_id
     </sql>
 
     <select id="selectChannelInfoList" parameterType="ChannelInfo" resultMap="ChannelInfoResult">
@@ -56,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="cookieDomain != null  and cookieDomain != ''"> and cookie_domain = #{cookieDomain}</if>
             <if test="dayMax != null  and dayMax != ''"> and day_max = #{dayMax}</if>
             <if test="titleLimit != null  and titleLimit != ''"> and title_limit = #{titleLimit}</if>
-            <if test="engineId != null "> and engine_id = #{engineId}</if>
+            <if test="engineId != null and engineId != ''"> and c.engine_id = #{engineId}</if>
             <if test="gainStatus != null  and gainStatus != ''"> and gain_status = #{gainStatus}</if>
             <if test="accDue != null "> and acc_due = #{accDue}</if>
             <if test="channelDetailJson != null  and channelDetailJson != ''"> and channel_detail_json = #{channelDetailJson}</if>

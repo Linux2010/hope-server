@@ -102,6 +102,9 @@ public class ChannelInfo extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long engineId;
 
+    /** 引擎名称 */
+    private String engineName;
+
     /** 盈利状态,0非盈利,1盈利,2封禁 */
     @Excel(name = "盈利状态,0非盈利,1盈利,2封禁")
     private String gainStatus;
@@ -298,6 +301,17 @@ public class ChannelInfo extends BaseEntity
     {
         return engineId;
     }
+
+    public void setEngineName(String engineName) 
+    {
+        this.engineName = engineName;
+    }
+
+    public String getEngineName() 
+    {
+        return engineName;
+    }
+
     public void setGainStatus(String gainStatus) 
     {
         this.gainStatus = gainStatus;
@@ -377,6 +391,7 @@ public class ChannelInfo extends BaseEntity
             .append("dayMax", getDayMax())
             .append("titleLimit", getTitleLimit())
             .append("engineId", getEngineId())
+            .append("engineName", getEngineName())
             .append("gainStatus", getGainStatus())
             .append("accDue", getAccDue())
             .append("channelDetailJson", getChannelDetailJson())

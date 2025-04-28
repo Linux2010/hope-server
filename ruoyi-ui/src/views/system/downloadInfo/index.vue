@@ -1,12 +1,53 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="名称" prop="downloadName">
+      <el-form-item prop="engineId">
+        <el-select v-model="queryParams.engineId" placeholder="引擎" clearable @change="handleQuery" style="width: 120px">
+          <el-option
+            v-for="engine in engineOptions"
+            :key="engine.engineId"
+            :label="engine.engineName"
+            :value="engine.engineId"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="downloadType">
+        <el-select v-model="queryParams.downloadType" placeholder="下载类型" clearable @change="handleQuery" style="width: 120px">
+          <el-option
+            v-for="dict in dict.type.download_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="downloadEnable">
+        <el-select v-model="queryParams.downloadEnable" placeholder="下载开关" clearable @change="handleQuery" style="width: 120px">
+          <el-option
+            v-for="dict in dict.type.download_enable"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="cycleType">
+        <el-select v-model="queryParams.cycleType" placeholder="下载循环" clearable @change="handleQuery" style="width: 120px">
+          <el-option
+            v-for="dict in dict.type.cycle_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="downloadName">
         <el-input
           v-model="queryParams.downloadName"
-          placeholder="请输入名称"
+          placeholder="名称"
           clearable
           @keyup.enter.native="handleQuery"
+          style="width: 120px"
         />
       </el-form-item>
       <el-form-item>
@@ -69,6 +110,7 @@
       :header-cell-style="{padding: '8px 8px', background: '#fafbfc'}"
     >
       <el-table-column type="selection" width="50" align="center" />
+      <el-table-column label="引擎" align="center" prop="engineName" min-width="90" />
       <el-table-column label="名称" align="center" prop="downloadName" min-width="120">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" :content="scope.row.downloadUrl" placement="top">
@@ -76,15 +118,27 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="类型" align="center" prop="downloadType" min-width="80"/>
+      <el-table-column label="类型" align="center" prop="downloadType" min-width="80">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.download_type" :value="scope.row.downloadType"/>
+        </template>
+      </el-table-column>
       <el-table-column label="内容" align="center" prop="videoType" min-width="80"/>
-      <el-table-column label="开关" align="center" prop="downloadEnable" min-width="60"/>
+      <el-table-column label="开关" align="center" prop="downloadEnable" min-width="60">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.download_enable" :value="scope.row.downloadEnable"/>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="140">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="质量" align="center" prop="quality" min-width="60"/>
+      <el-table-column label="质量" align="center" prop="quality" min-width="60">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.quality" :value="scope.row.quality"/>
+        </template>
+      </el-table-column>
       <el-table-column label="存储" align="center" prop="diskStorageInfo" min-width="80"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="180">
         <template slot-scope="scope">
@@ -104,10 +158,84 @@
     />
 
     <!-- 添加或修改下载管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="90px">
-        <!-- 第一行 -->
-        <el-row :gutter="20">
+    <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px" size="small">
+        <!-- 下拉框类型的表单项放在前面 -->
+        <el-row :gutter="15">
+          <el-col :span="12">
+            <el-form-item label="引擎" prop="engineId">
+              <template v-if="isView">
+                <span>{{ form.engineName }}</span>
+              </template>
+              <template v-else>
+                <el-select v-model="form.engineId" placeholder="请选择引擎" clearable @change="handleEngineChange" style="width: 100%">
+                  <el-option
+                    v-for="engine in engineOptions"
+                    :key="engine.engineId"
+                    :label="engine.engineName"
+                    :value="engine.engineId"
+                  />
+                </el-select>
+              </template>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="类型" prop="downloadType">
+              <template v-if="isView">
+                <dict-tag :options="dict.type.download_type" :value="form.downloadType"/>
+              </template>
+              <template v-else>
+                <el-select v-model="form.downloadType" placeholder="请选择下载类型" clearable style="width: 100%">
+                  <el-option
+                    v-for="dict in dict.type.download_type"
+                    :key="dict.value"
+                    :label="dict.label"
+                    :value="dict.value"
+                  />
+                </el-select>
+              </template>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="15">
+          <el-col :span="12">
+            <el-form-item label="开关" prop="downloadEnable">
+              <template v-if="isView">
+                <dict-tag :options="dict.type.download_enable" :value="form.downloadEnable"/>
+              </template>
+              <template v-else>
+                <el-select v-model="form.downloadEnable" placeholder="请选择下载开关" style="width: 100%">
+                  <el-option
+                    v-for="dict in dict.type.download_enable"
+                    :key="dict.value"
+                    :label="dict.label"
+                    :value="dict.value"
+                  />
+                </el-select>
+              </template>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="质量" prop="quality">
+              <template v-if="isView">
+                <dict-tag :options="dict.type.quality" :value="form.quality"/>
+              </template>
+              <template v-else>
+                <el-select v-model="form.quality" placeholder="请选择质量" style="width: 100%">
+                  <el-option
+                    v-for="dict in dict.type.quality"
+                    :key="dict.value"
+                    :label="dict.label"
+                    :value="dict.value"
+                  />
+                </el-select>
+              </template>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="名称" prop="downloadName">
               <template v-if="isView">
@@ -115,29 +243,6 @@
               </template>
               <template v-else>
                 <el-input v-model="form.downloadName" placeholder="请输入名称" />
-              </template>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="类型" prop="downloadType">
-              <template v-if="isView">
-                <span>{{ form.downloadType }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.downloadType" placeholder="请输入类型" />
-              </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- 第二行 -->
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="脚本" prop="shellPath">
-              <template v-if="isView">
-                <span>{{ form.shellPath }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.shellPath" placeholder="请输入脚本" />
               </template>
             </el-form-item>
           </el-col>
@@ -152,38 +257,19 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- 第三行 -->
-        <el-row :gutter="20">
+
+        <el-row :gutter="15">
           <el-col :span="12">
-            <el-form-item label="开关" prop="downloadEnable">
+            <el-form-item label="脚本" prop="shellPath">
               <template v-if="isView">
-                <span>{{ form.downloadEnable }}</span>
+                <span>{{ form.shellPath }}</span>
               </template>
               <template v-else>
-                <el-input v-model="form.downloadEnable" placeholder="请输入开关" />
+                <el-input v-model="form.shellPath" placeholder="请输入脚本" />
               </template>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="质量" prop="quality">
-              <template v-if="isView">
-                <span>{{ form.quality }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.quality" placeholder="请输入质量" />
-              </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- 第四行 -->
-        <el-row :gutter="20">
-          <!-- 存储只在查看时展示 -->
-          <el-col :span="12" v-if="isView">
-            <el-form-item label="存储" prop="diskStorageInfo">
-              <span>{{ form.diskStorageInfo }}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="isView ? 12 : 24">
             <el-form-item label="存储路径" prop="downloadPath">
               <template v-if="isView">
                 <span>{{ form.downloadPath }}</span>
@@ -194,8 +280,8 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- 第五行 -->
-        <el-row :gutter="20">
+
+        <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="开始" prop="downloadStart">
               <template v-if="isView">
@@ -217,8 +303,8 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- 第六行 -->
-        <el-row :gutter="20">
+
+        <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="全量" prop="downloadAllEnd">
               <template v-if="isView">
@@ -240,27 +326,29 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- 第七行：URL和描述单独一行 -->
-        <el-row :gutter="20">
+
+        <!-- 多行输入框，独占一行 -->
+        <el-row :gutter="15">
           <el-col :span="24">
             <el-form-item label="URL" prop="downloadUrl">
               <template v-if="isView">
                 <div style="white-space: pre-line;">{{ form.downloadUrl }}</div>
               </template>
               <template v-else>
-                <el-input v-model="form.downloadUrl" type="textarea" placeholder="请输入URL" />
+                <el-input v-model="form.downloadUrl" type="textarea" :rows="2" placeholder="请输入URL" />
               </template>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+
+        <el-row :gutter="15">
           <el-col :span="24">
             <el-form-item label="描述" prop="downloadDesc">
               <template v-if="isView">
                 <div style="white-space: pre-line;">{{ form.downloadDesc }}</div>
               </template>
               <template v-else>
-                <el-input v-model="form.downloadDesc" type="textarea" placeholder="请输入描述" />
+                <el-input v-model="form.downloadDesc" type="textarea" :rows="2" placeholder="请输入描述" />
               </template>
             </el-form-item>
           </el-col>
@@ -275,10 +363,16 @@
 </template>
 
 <script>
-import { listDownloadInfo, getDownloadInfo, delDownloadInfo, addDownloadInfo, updateDownloadInfo } from "@/api/system/downloadInfo";
+import { listDownloadInfo, getDownloadInfo, delDownloadInfo, addDownloadInfo, updateDownloadInfo, listAllEngines } from "@/api/system/downloadInfo";
+import { getDicts } from "@/api/system/dict/data";
+import DictTag from "@/components/DictTag";
 
 export default {
   name: "DownloadInfo",
+  components: {
+    DictTag
+  },
+  dicts: ['download_type', 'download_enable', 'cycle_type', 'quality'],
   data() {
     return {
       // 遮罩层
@@ -307,6 +401,8 @@ export default {
         downloadType: null,
         videoType: null,
         downloadEnable: null,
+        engineId: null,
+        cycleType: null,
       },
       // 表单参数
       form: {},
@@ -318,13 +414,19 @@ export default {
         downloadType: [
           { required: true, message: "类型不能为空", trigger: "change" }
         ],
+        engineId: [
+          { required: true, message: "引擎不能为空", trigger: "change" }
+        ],
       },
       // 是否查看模式
       isView: false,
+      // 引擎选项
+      engineOptions: [],
     };
   },
   created() {
     this.getList();
+    this.getEngineList();
   },
   methods: {
     /** 查询下载管理列表 */
@@ -334,6 +436,20 @@ export default {
         this.downloadInfoList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    /** 获取字典数据 */
+    getDicts() {
+      Promise.all([
+        getDicts("download_type"),
+        getDicts("download_enable"),
+        getDicts("cycle_type"),
+        getDicts("quality")
+      ]).then(([downloadTypeRes, downloadEnableRes, cycleTypeRes, qualityRes]) => {
+        this.downloadTypeOptions = downloadTypeRes.data;
+        this.downloadEnableOptions = downloadEnableRes.data;
+        this.cycleTypeOptions = cycleTypeRes.data;
+        this.qualityOptions = qualityRes.data;
       });
     },
     // 取消按钮
@@ -362,6 +478,7 @@ export default {
         createTime: null,
         downloadDesc: null,
         engineId: null,
+        engineName: null,
         cycleType: null,
         usedSize: null,
         quality: null,
@@ -372,11 +489,19 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      // 确保engineId是数字类型
+      if (this.queryParams.engineId) {
+        this.queryParams.engineId = Number(this.queryParams.engineId);
+      }
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.engineId = undefined;
+      this.queryParams.downloadType = undefined;
+      this.queryParams.downloadEnable = undefined;
+      this.queryParams.cycleType = undefined;
       this.handleQuery();
     },
     // 多选框选中数据
@@ -450,6 +575,27 @@ export default {
       this.download('system/downloadInfo/export', {
         ...this.queryParams
       }, `downloadInfo_${new Date().getTime()}.xlsx`)
+    },
+    /** 查询引擎列表 */
+    getEngineList() {
+      listAllEngines().then(response => {
+        if (response.code === 200) {
+          this.engineOptions = response.data;
+        } else {
+          this.$message.error("获取引擎列表失败");
+        }
+      });
+    },
+    /** 引擎选择变更 */
+    handleEngineChange(engineId) {
+      if (engineId) {
+        const selectedEngine = this.engineOptions.find(engine => engine.engineId === engineId);
+        if (selectedEngine) {
+          this.form.engineName = selectedEngine.engineName;
+        }
+      } else {
+        this.form.engineName = null;
+      }
     }
   }
 };

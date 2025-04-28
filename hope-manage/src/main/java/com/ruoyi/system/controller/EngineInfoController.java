@@ -101,4 +101,14 @@ public class EngineInfoController extends BaseController
     {
         return toAjax(engineInfoService.deleteEngineInfoByEngineIds(engineIds));
     }
+    
+    /**
+     * 获取所有引擎信息
+     */
+    @GetMapping("/listAll")
+    public AjaxResult listAll()
+    {
+        List<EngineInfo> list = engineInfoService.selectEngineInfoList(new EngineInfo());
+        return success(list);
+    }
 }

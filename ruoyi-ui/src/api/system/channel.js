@@ -42,3 +42,20 @@ export function delInfo(channelId) {
     method: 'delete'
   })
 }
+
+// 查询引擎列表
+export function listEngine(query) {
+  return request({
+    url: '/system/engineInfo/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取所有引擎信息
+export function listAllEngines() {
+  return request({
+    url: '/system/engineInfo/listAll',
+    method: 'get'
+  })
+}

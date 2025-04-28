@@ -1,12 +1,33 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="名称" prop="engineName">
+      <el-form-item prop="engineStatus">
+        <el-select v-model="queryParams.engineStatus" placeholder="启用状态" clearable @change="handleQuery" style="width: 120px">
+          <el-option
+            v-for="dict in dict.type.engine_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="engineNetStatus">
+        <el-select v-model="queryParams.engineNetStatus" placeholder="网络状态" clearable @change="handleQuery" style="width: 120px">
+          <el-option
+            v-for="dict in dict.type.engine_net_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="engineName">
         <el-input
           v-model="queryParams.engineName"
-          placeholder="请输入名称"
+          placeholder="名称"
           clearable
           @keyup.enter.native="handleQuery"
+          style="width: 120px"
         />
       </el-form-item>
       <el-form-item>
@@ -66,8 +87,16 @@
       <el-table-column label="引擎id" align="center" prop="engineId" width="80"/>
       <el-table-column label="名称" align="center" prop="engineName" min-width="120"/>
       <el-table-column label="域名" align="center" prop="engineIp" min-width="140"/>
-      <el-table-column label="启用状态" align="center" prop="engineStatus" width="100"/>
-      <el-table-column label="网络状态" align="center" prop="engineNetStatus" width="100"/>
+      <el-table-column label="启用状态" align="center" prop="engineStatus" width="100">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.engine_status" :value="scope.row.engineStatus"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="网络状态" align="center" prop="engineNetStatus" width="100">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.engine_net_status" :value="scope.row.engineNetStatus"/>
+        </template>
+      </el-table-column>
       <el-table-column label="账号" align="center" prop="username" width="100"/>
       <el-table-column label="密码" align="center" prop="password" width="100"/>
       <el-table-column label="机房" align="center" prop="machineRoomId" width="100"/>
@@ -216,6 +245,7 @@ import { listEngineInfo, getEngineInfo, delEngineInfo, addEngineInfo, updateEngi
 
 export default {
   name: "EngineInfo",
+  dicts: ['engine_status', 'engine_net_status'],
   data() {
     return {
       // 遮罩层
@@ -294,6 +324,8 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.engineStatus = undefined;
+      this.queryParams.engineNetStatus = undefined;
       this.handleQuery();
     },
     // 多选框选中数据

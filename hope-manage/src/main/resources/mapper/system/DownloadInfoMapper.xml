@@ -22,6 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="downloadDesc"    column="download_desc"    />
         <result property="engineId"    column="engine_id"    />
+        <result property="engineName"    column="engine_name"    />
         <result property="cycleType"    column="cycle_type"    />
         <result property="usedSize"    column="used_size"    />
         <result property="quality"    column="quality"    />
@@ -29,16 +30,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectDownloadInfoVo">
-        select download_id, download_name, download_type, video_type, shell_path, agent, download_url, download_enable, download_path, download_start, download_end, download_all_end, after_shell_path, modify_time, create_time, download_desc, engine_id, cycle_type, used_size, quality, disk_storage_info from download_info
+        select d.download_id, d.download_name, d.download_type, d.video_type, d.shell_path, d.agent, d.download_url, d.download_enable, d.download_path, d.download_start, d.download_end, d.download_all_end, d.after_shell_path, d.modify_time, d.create_time, d.download_desc, d.engine_id, e.engine_name, d.cycle_type, d.used_size, d.quality, d.disk_storage_info from download_info d left join engine_info e on d.engine_id = e.engine_id
     </sql>
 
     <select id="selectDownloadInfoList" parameterType="DownloadInfo" resultMap="DownloadInfoResult">
         <include refid="selectDownloadInfoVo"/>
         <where>  
-            <if test="downloadName != null  and downloadName != ''"> and download_name like concat('%', #{downloadName}, '%')</if>
-            <if test="downloadType != null  and downloadType != ''"> and download_type = #{downloadType}</if>
-            <if test="videoType != null  and videoType != ''"> and video_type = #{videoType}</if>
-            <if test="downloadEnable != null  and downloadEnable != ''"> and download_enable = #{downloadEnable}</if>
+            <if test="downloadName != null  and downloadName != ''"> and d.download_name like concat('%', #{downloadName}, '%')</if>
+            <if test="downloadType != null  and downloadType != ''"> and d.download_type = #{downloadType}</if>
+            <if test="videoType != null  and videoType != ''"> and d.video_type = #{videoType}</if>
+            <if test="downloadEnable != null  and downloadEnable != ''"> and d.download_enable = #{downloadEnable}</if>
+            <if test="engineId != null"> and d.engine_id = #{engineId}</if>
+            <if test="cycleType != null  and cycleType != ''"> and d.cycle_type = #{cycleType}</if>
         </where>
     </select>
     

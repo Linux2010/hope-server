@@ -1,8 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item prop="engineId">
+        <el-select v-model="queryParams.engineId" placeholder="引擎" clearable @change="handleQuery" style="width: 120px">
+          <el-option
+            v-for="engine in engineOptions"
+            :key="engine.engineId"
+            :label="engine.engineName"
+            :value="engine.engineId"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item prop="channelType">
-        <el-select v-model="queryParams.channelType" placeholder="请选择频道类型" clearable @change="handleQuery">
+        <el-select v-model="queryParams.channelType" placeholder="频道类型" clearable @change="handleQuery" style="width: 120px">
           <el-option
             v-for="dict in dict.type.channel_type"
             :key="dict.value"
@@ -12,7 +22,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="channelOffOn">
-        <el-select v-model="queryParams.channelOffOn" placeholder="请选择开关状态" clearable @change="handleQuery">
+        <el-select v-model="queryParams.channelOffOn" placeholder="开关状态" clearable @change="handleQuery" style="width: 120px">
           <el-option
             v-for="dict in dict.type.hope_channel_off_on"
             :key="dict.value"
@@ -22,7 +32,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="cookieEnable">
-        <el-select v-model="queryParams.cookieEnable" placeholder="请选择预警状态" clearable @change="handleQuery">
+        <el-select v-model="queryParams.cookieEnable" placeholder="预警状态" clearable @change="handleQuery" style="width: 120px">
           <el-option
             v-for="dict in dict.type.hope_cookie_enable"
             :key="dict.value"
@@ -31,20 +41,22 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item  prop="channelName">
+      <el-form-item prop="channelName">
         <el-input
           v-model="queryParams.channelName"
-          placeholder="请输入频道名称"
+          placeholder="频道名称"
           clearable
           @keyup.enter.native="handleQuery"
+          style="width: 120px"
         />
       </el-form-item>
-      <el-form-item  prop="phone">
+      <el-form-item prop="phone">
         <el-input
           v-model="queryParams.phone"
-          placeholder="请输入手机号"
+          placeholder="手机号"
           clearable
           @keyup.enter.native="handleQuery"
+          style="width: 120px"
         />
       </el-form-item>
       <el-form-item>
@@ -86,22 +98,12 @@
           v-hasPermi="['system:channel:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:channel:export']"
-        >导出</el-button>
-      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="引擎" align="center" prop="engineId"  width="90" />
+      <el-table-column label="引擎" align="center" prop="engineName"  width="90" />
       <el-table-column label="名称" align="center" prop="channelName"  width="160"/>
       <el-table-column label="盈利" align="center" prop="gainStatus"  width="90" >
         <template slot-scope="scope">
@@ -168,25 +170,16 @@
 
     <!-- 添加或修改【频道管理】对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="160px">
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="频道名称" prop="channelName">
-              <template v-if="isView">
-                <span>{{ form.channelName }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.channelName" placeholder="请输入频道名称" />
-              </template>
-            </el-form-item>
-          </el-col>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px" size="small">
+        <!-- 下拉框类型的表单项放在前面 -->
+        <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="类型" prop="channelType">
               <template v-if="isView">
                 <dict-tag :options="dict.type.channel_type" :value="form.channelType"/>
               </template>
               <template v-else>
-                <el-select v-model="form.channelType" placeholder="请选择频道类型" clearable>
+                <el-select v-model="form.channelType" placeholder="请选择频道类型" clearable style="width: 100%">
                   <el-option
                     v-for="dict in dict.type.channel_type"
                     :key="dict.value"
@@ -197,16 +190,13 @@
               </template>
             </el-form-item>
           </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="开关" prop="channelOffOn">
               <template v-if="isView">
                 <dict-tag :options="dict.type.hope_channel_off_on" :value="form.channelOffOn"/>
               </template>
               <template v-else>
-                <el-select v-model="form.channelOffOn" placeholder="请选择开关状态">
+                <el-select v-model="form.channelOffOn" placeholder="请选择开关状态" style="width: 100%">
                   <el-option
                     v-for="dict in dict.type.hope_channel_off_on"
                     :key="dict.value"
@@ -217,13 +207,16 @@
               </template>
             </el-form-item>
           </el-col>
+        </el-row>
+
+        <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="盈利" prop="gainStatus">
               <template v-if="isView">
                 <dict-tag :options="dict.type.hope_gain_status" :value="form.gainStatus"/>
               </template>
               <template v-else>
-                <el-select v-model="form.gainStatus" placeholder="请选择盈利状态">
+                <el-select v-model="form.gainStatus" placeholder="请选择盈利状态" style="width: 100%">
                   <el-option
                     v-for="dict in dict.type.hope_gain_status"
                     :key="dict.value"
@@ -234,9 +227,56 @@
               </template>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="引擎" prop="engineId">
+              <template v-if="isView">
+                <span>{{ form.engineName }}</span>
+              </template>
+              <template v-else>
+                <el-select v-model="form.engineId" placeholder="请选择引擎" clearable @change="handleEngineChange" style="width: 100%">
+                  <el-option
+                    v-for="engine in engineOptions"
+                    :key="engine.engineId"
+                    :label="engine.engineName"
+                    :value="engine.engineId"
+                  />
+                </el-select>
+              </template>
+            </el-form-item>
+          </el-col>
         </el-row>
 
-        <el-row :gutter="20">
+        <el-row :gutter="15">
+          <el-col :span="12">
+            <el-form-item label="账号到期" prop="accDue">
+              <template v-if="isView">
+                <span>{{ parseTime(form.accDue, '{y}-{m}-{d}') }}</span>
+              </template>
+              <template v-else>
+                <el-date-picker clearable
+                  v-model="form.accDue"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="请选择账号到期时间"
+                  style="width: 100%">
+                </el-date-picker>
+              </template>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="频道名称" prop="channelName">
+              <template v-if="isView">
+                <span>{{ form.channelName }}</span>
+              </template>
+              <template v-else>
+                <el-input v-model="form.channelName" placeholder="请输入频道名称" />
+              </template>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <!-- 单行输入框，每行两个 -->
+        <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="用户名" prop="username">
               <template v-if="isView">
@@ -259,7 +299,7 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="20">
+        <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="手机号" prop="phone">
               <template v-if="isView">
@@ -267,29 +307,6 @@
               </template>
               <template v-else>
                 <el-input v-model="form.phone" placeholder="请输入手机号" />
-              </template>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="登录地址" prop="loginUrl">
-              <template v-if="isView">
-                <span>{{ form.loginUrl }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.loginUrl" placeholder="请输入登录地址" />
-              </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="主页地址" prop="homeUrl">
-              <template v-if="isView">
-                <span>{{ form.homeUrl }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.homeUrl" placeholder="请输入主页地址" />
               </template>
             </el-form-item>
           </el-col>
@@ -305,7 +322,7 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="20">
+        <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="辅助邮箱" prop="assistEmail">
               <template v-if="isView">
@@ -328,7 +345,7 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="20">
+        <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="标题上限" prop="titleLimit">
               <template v-if="isView">
@@ -340,43 +357,62 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="账号到期" prop="accDue">
+            <el-form-item label="登录地址" prop="loginUrl">
               <template v-if="isView">
-                <span>{{ parseTime(form.accDue, '{y}-{m}-{d}') }}</span>
+                <span>{{ form.loginUrl }}</span>
               </template>
               <template v-else>
-                <el-date-picker clearable
-                  v-model="form.accDue"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  placeholder="请选择账号到期时间">
-                </el-date-picker>
+                <el-input v-model="form.loginUrl" placeholder="请输入登录地址" />
               </template>
             </el-form-item>
           </el-col>
         </el-row>
 
-        <el-row :gutter="20">
+        <el-row :gutter="15">
+          <el-col :span="12">
+            <el-form-item label="主页地址" prop="homeUrl">
+              <template v-if="isView">
+                <span>{{ form.homeUrl }}</span>
+              </template>
+              <template v-else>
+                <el-input v-model="form.homeUrl" placeholder="请输入主页地址" />
+              </template>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="Cookie域名" prop="cookieDomain">
+              <template v-if="isView">
+                <span>{{ form.cookieDomain }}</span>
+              </template>
+              <template v-else>
+                <el-input v-model="form.cookieDomain" placeholder="请输入Cookie域名" />
+              </template>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <!-- 多行输入框，独占一行 -->
+        <el-row :gutter="15">
           <el-col :span="24">
             <el-form-item label="描述" prop="channelDesc">
               <template v-if="isView">
                 <span>{{ form.channelDesc }}</span>
               </template>
               <template v-else>
-                <el-input v-model="form.channelDesc" type="textarea" placeholder="请输入描述" />
+                <el-input v-model="form.channelDesc" type="textarea" :rows="2" placeholder="请输入描述" />
               </template>
             </el-form-item>
           </el-col>
         </el-row>
 
-        <el-row :gutter="20">
+        <el-row :gutter="15">
           <el-col :span="24">
             <el-form-item label="频道地址" prop="channelUrl">
               <template v-if="isView">
                 <span>{{ form.channelUrl }}</span>
               </template>
               <template v-else>
-                <el-input v-model="form.channelUrl" type="textarea" placeholder="请输入频道地址" />
+                <el-input v-model="form.channelUrl" type="textarea" :rows="2" placeholder="请输入频道地址" />
               </template>
             </el-form-item>
           </el-col>
@@ -391,7 +427,7 @@
 </template>
 
 <script>
-import { listInfo, getInfo, delInfo, addInfo, updateInfo } from "@/api/system/channel";
+import { listInfo, getInfo, delInfo, addInfo, updateInfo, listEngine, listAllEngines } from "@/api/system/channel";
 
 export default {
   name: "Info",
@@ -456,10 +492,12 @@ export default {
       },
       // 是否查看模式
       isView: false,
+      engineOptions: [],
     };
   },
   created() {
     this.getList();
+    this.getEngineList();
   },
   methods: {
     /** 查询【频道管理】列表 */
@@ -510,11 +548,16 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      // 确保engineId是数字类型
+      if (this.queryParams.engineId) {
+        this.queryParams.engineId = Number(this.queryParams.engineId);
+      }
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.engineId = undefined;
       this.handleQuery();
     },
     // 多选框选中数据
@@ -582,19 +625,48 @@ export default {
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('system/channel/export', {
-        ...this.queryParams
-      }, `info_${new Date().getTime()}.xlsx`)
-    },
     /** 排序触发事件 */
     handleSortChange(column) {
       this.queryParams.orderByColumn = column.prop;
       this.queryParams.isAsc = column.order;
       this.getList();
     },
-  }
+    handleEngineSearch(queryString, callback) {
+      if (queryString.length === 0) {
+        callback([]);
+        return;
+      }
+      // 从已有的引擎选项中过滤
+      const results = this.engineOptions.filter(engine => 
+        engine.engineName.toLowerCase().includes(queryString.toLowerCase())
+      );
+      callback(results);
+    },
+    handleEngineSelect(item) {
+      this.form.engineId = item.engineId;
+      this.form.engineName = item.engineName;
+    },
+    handleEngineChange(engineId) {
+      if (engineId) {
+        const selectedEngine = this.engineOptions.find(engine => engine.engineId === engineId);
+        if (selectedEngine) {
+          this.form.engineName = selectedEngine.engineName;
+        }
+      } else {
+        this.form.engineName = null;
+      }
+    },
+    /** 查询引擎列表 */
+    getEngineList() {
+      listAllEngines().then(response => {
+        if (response.code === 200) {
+          this.engineOptions = response.data;
+        } else {
+          this.$message.error("获取引擎列表失败");
+        }
+      });
+    },
+  } 
 };
 </script>
 

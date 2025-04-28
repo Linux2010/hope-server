@@ -71,6 +71,10 @@ public class DownloadInfo extends BaseEntity
     /** 引擎ID */
     private Long engineId;
 
+    /** 引擎名称 */
+    @Excel(name = "引擎")
+    private String engineName;
+
     /** 循环类型 */
     private String cycleType;
 
@@ -230,6 +234,15 @@ public class DownloadInfo extends BaseEntity
     {
         return engineId;
     }
+    public void setEngineName(String engineName) 
+    {
+        this.engineName = engineName;
+    }
+
+    public String getEngineName() 
+    {
+        return engineName;
+    }
     public void setCycleType(String cycleType) 
     {
         this.cycleType = cycleType;
@@ -287,6 +300,7 @@ public class DownloadInfo extends BaseEntity
             .append("createTime", getCreateTime())
             .append("downloadDesc", getDownloadDesc())
             .append("engineId", getEngineId())
+            .append("engineName", getEngineName())
             .append("cycleType", getCycleType())
             .append("usedSize", getUsedSize())
             .append("quality", getQuality())
