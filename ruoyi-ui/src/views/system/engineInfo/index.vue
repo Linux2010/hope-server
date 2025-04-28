@@ -69,16 +69,6 @@
           v-hasPermi="['system:engineInfo:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:engineInfo:export']"
-        >导出</el-button>
-      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -138,6 +128,34 @@
     <!-- 添加或修改引擎管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <!-- 首行：下拉框放前面 -->
+        <el-row :gutter="15">
+          <el-col :span="12">
+            <el-form-item label="启用状态" prop="engineStatus">
+              <template v-if="isView">
+                <dict-tag :options="dict.type.engine_status" :value="form.engineStatus"/>
+              </template>
+              <template v-else>
+                <el-select v-model="form.engineStatus" placeholder="请选择启用状态" clearable style="width: 100%">
+                  <el-option v-for="dict in dict.type.engine_status" :key="dict.value" :label="dict.label" :value="dict.value"/>
+                </el-select>
+              </template>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="网络状态" prop="engineNetStatus">
+              <template v-if="isView">
+                <dict-tag :options="dict.type.engine_net_status" :value="form.engineNetStatus"/>
+              </template>
+              <template v-else>
+                <el-select v-model="form.engineNetStatus" placeholder="请选择网络状态" clearable style="width: 100%">
+                  <el-option v-for="dict in dict.type.engine_net_status" :key="dict.value" :label="dict.label" :value="dict.value"/>
+                </el-select>
+              </template>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 第二行：名称、域名 -->
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="名称" prop="engineName">
@@ -160,6 +178,7 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 第三行：账号、密码 -->
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="账号" prop="username">
@@ -182,6 +201,7 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!-- 第四行：机房 -->
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="机房" prop="machineRoomId">
@@ -193,29 +213,8 @@
               </template>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="启用状态" prop="engineStatus">
-              <template v-if="isView">
-                <span>{{ form.engineStatus }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.engineStatus" placeholder="请输入启用状态" />
-              </template>
-            </el-form-item>
-          </el-col>
         </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="网络状态" prop="engineNetStatus">
-              <template v-if="isView">
-                <span>{{ form.engineNetStatus }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.engineNetStatus" placeholder="请输入网络状态" />
-              </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <!-- 第五行：描述 -->
         <el-row>
           <el-col :span="24">
             <el-form-item label="描述" prop="engineDesc">
@@ -381,12 +380,6 @@ export default {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('system/engineInfo/export', {
-        ...this.queryParams
-      }, `engineInfo_${new Date().getTime()}.xlsx`)
     },
     handleView(row) {
       this.reset();

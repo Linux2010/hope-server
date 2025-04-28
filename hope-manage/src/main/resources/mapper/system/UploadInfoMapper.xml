@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UploadInfoMapper">
+    
+    <resultMap type="UploadInfo" id="UploadInfoResult">
+        <result property="uploadId"    column="upload_id"    />
+        <result property="uploadName"    column="upload_name"    />
+        <result property="uploadEnable"    column="upload_enable"    />
+        <result property="uploadDayMax"    column="upload_day_max"    />
+        <result property="uploadPath"    column="upload_path"    />
+        <result property="uploadShellPath"    column="upload_shell_path"    />
+        <result property="uploadPlayList"    column="upload_play_list"    />
+        <result property="uploadItem"    column="upload_item"    />
+        <result property="uploadLabel"    column="upload_label"    />
+        <result property="uploadDesc"    column="upload_desc"    />
+        <result property="downloadName"    column="download_name"    />
+        <result property="channelName"    column="channel_name"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="uploadOk"    column="upload_ok"    />
+    </resultMap>
+
+    <sql id="selectUploadInfoVo">
+        select upload_id, upload_name, upload_enable, upload_day_max, upload_path, upload_shell_path, upload_play_list, upload_item, upload_label, upload_desc, download_name, channel_name, modify_time, create_time, upload_ok from upload_info
+    </sql>
+
+    <select id="selectUploadInfoList" parameterType="UploadInfo" resultMap="UploadInfoResult">
+        <include refid="selectUploadInfoVo"/>
+        <where>  
+            <if test="uploadEnable != null  and uploadEnable != ''"> and upload_enable = #{uploadEnable}</if>
+            <if test="downloadName != null  and downloadName != ''"> and download_name like concat('%', #{downloadName}, '%')</if>
+            <if test="channelName != null  and channelName != ''"> and channel_name like concat('%', #{channelName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectUploadInfoByUploadId" parameterType="Long" resultMap="UploadInfoResult">
+        <include refid="selectUploadInfoVo"/>
+        where upload_id = #{uploadId}
+    </select>
+
+    <insert id="insertUploadInfo" parameterType="UploadInfo" useGeneratedKeys="true" keyProperty="uploadId">
+        insert into upload_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uploadName != null">upload_name,</if>
+            <if test="uploadEnable != null">upload_enable,</if>
+            <if test="uploadDayMax != null">upload_day_max,</if>
+            <if test="uploadPath != null">upload_path,</if>
+            <if test="uploadShellPath != null">upload_shell_path,</if>
+            <if test="uploadPlayList != null">upload_play_list,</if>
+            <if test="uploadItem != null">upload_item,</if>
+            <if test="uploadLabel != null">upload_label,</if>
+            <if test="uploadDesc != null">upload_desc,</if>
+            <if test="downloadName != null">download_name,</if>
+            <if test="channelName != null">channel_name,</if>
+            <if test="modifyTime != null">modify_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="uploadOk != null">upload_ok,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uploadName != null">#{uploadName},</if>
+            <if test="uploadEnable != null">#{uploadEnable},</if>
+            <if test="uploadDayMax != null">#{uploadDayMax},</if>
+            <if test="uploadPath != null">#{uploadPath},</if>
+            <if test="uploadShellPath != null">#{uploadShellPath},</if>
+            <if test="uploadPlayList != null">#{uploadPlayList},</if>
+            <if test="uploadItem != null">#{uploadItem},</if>
+            <if test="uploadLabel != null">#{uploadLabel},</if>
+            <if test="uploadDesc != null">#{uploadDesc},</if>
+            <if test="downloadName != null">#{downloadName},</if>
+            <if test="channelName != null">#{channelName},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="uploadOk != null">#{uploadOk},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUploadInfo" parameterType="UploadInfo">
+        update upload_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uploadName != null">upload_name = #{uploadName},</if>
+            <if test="uploadEnable != null">upload_enable = #{uploadEnable},</if>
+            <if test="uploadDayMax != null">upload_day_max = #{uploadDayMax},</if>
+            <if test="uploadPath != null">upload_path = #{uploadPath},</if>
+            <if test="uploadShellPath != null">upload_shell_path = #{uploadShellPath},</if>
+            <if test="uploadPlayList != null">upload_play_list = #{uploadPlayList},</if>
+            <if test="uploadItem != null">upload_item = #{uploadItem},</if>
+            <if test="uploadLabel != null">upload_label = #{uploadLabel},</if>
+            <if test="uploadDesc != null">upload_desc = #{uploadDesc},</if>
+            <if test="downloadName != null">download_name = #{downloadName},</if>
+            <if test="channelName != null">channel_name = #{channelName},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="uploadOk != null">upload_ok = #{uploadOk},</if>
+        </trim>
+        where upload_id = #{uploadId}
+    </update>
+
+    <delete id="deleteUploadInfoByUploadId" parameterType="Long">
+        delete from upload_info where upload_id = #{uploadId}
+    </delete>
+
+    <delete id="deleteUploadInfoByUploadIds" parameterType="String">
+        delete from upload_info where upload_id in 
+        <foreach item="uploadId" collection="array" open="(" separator="," close=")">
+            #{uploadId}
+        </foreach>
+    </delete>
+</mapper>
