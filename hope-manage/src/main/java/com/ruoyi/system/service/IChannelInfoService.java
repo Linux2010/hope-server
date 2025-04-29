@@ -60,4 +60,13 @@ public interface IChannelInfoService
      * @return 结果
      */
     public int deleteChannelInfoByChannelId(Long channelId);
+    
+    /**
+     * 模糊搜索频道名称
+     * 
+     * @param channelName 频道名称关键字
+     * @param limit 限制返回数量
+     * @return 符合条件的频道名称列表
+     */
+    public List<String> searchChannelNames(String channelName, int limit);
 }

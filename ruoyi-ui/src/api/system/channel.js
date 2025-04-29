@@ -59,3 +59,20 @@ export function listAllEngines() {
     method: 'get'
   })
 }
+
+// 获取所有频道名称列表
+export function listAllChannelNames() {
+  return request({
+    url: '/system/channel/listAllNames',
+    method: 'get'
+  })
+}
+
+// 模糊搜索频道名称
+export function searchChannelNames(channelName) {
+  return request({
+    url: '/system/channel/searchNames',
+    method: 'get',
+    params: { channelName }
+  })
+}

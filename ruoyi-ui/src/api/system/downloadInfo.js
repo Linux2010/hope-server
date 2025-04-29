@@ -50,3 +50,20 @@ export function listAllEngines() {
     method: 'get'
   })
 }
+
+// 获取所有下载名称列表
+export function listAllDownloadNames() {
+  return request({
+    url: '/system/downloadInfo/listAllNames',
+    method: 'get'
+  })
+}
+
+// 模糊搜索下载名称
+export function searchDownloadNames(downloadName) {
+  return request({
+    url: '/system/downloadInfo/searchNames',
+    method: 'get',
+    params: { downloadName }
+  })
+}

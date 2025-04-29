@@ -92,4 +92,17 @@ public class DownloadInfoServiceImpl implements IDownloadInfoService
     {
         return downloadInfoMapper.deleteDownloadInfoByDownloadId(downloadId);
     }
+    
+    /**
+     * 模糊搜索下载名称
+     *
+     * @param downloadName 下载名称关键字
+     * @param limit 限制返回数量
+     * @return 符合条件的下载名称列表
+     */
+    @Override
+    public List<String> searchDownloadNames(String downloadName, int limit) {
+        // 直接调用Mapper方法获取下载名称列表
+        return downloadInfoMapper.searchDownloadNamesFuzzy(downloadName, limit);
+    }
 }

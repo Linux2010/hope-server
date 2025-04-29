@@ -2,6 +2,7 @@ package com.ruoyi.system.mapper;
 
 import java.util.List;
 import com.ruoyi.system.domain.DownloadInfo;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 下载管理Mapper接口
@@ -58,4 +59,13 @@ public interface DownloadInfoMapper
      * @return 结果
      */
     public int deleteDownloadInfoByDownloadIds(Long[] downloadIds);
+    
+    /**
+     * 模糊搜索下载名称
+     * 
+     * @param downloadName 下载名称关键字
+     * @param limit 限制返回数量
+     * @return 符合条件的下载名称列表
+     */
+    public List<String> searchDownloadNamesFuzzy(@Param("downloadName") String downloadName, @Param("limit") int limit);
 }

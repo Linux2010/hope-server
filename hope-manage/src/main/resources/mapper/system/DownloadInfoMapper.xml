@@ -135,4 +135,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{downloadId}
         </foreach>
     </delete>
+
+    <!-- 模糊搜索下载名称 -->
+    <select id="searchDownloadNamesFuzzy" resultType="String">
+        SELECT download_name
+        FROM download_info 
+        <where>
+            <!-- 模糊匹配下载名称 -->
+            <if test="downloadName != null and downloadName != ''">
+                download_name LIKE concat('%', #{downloadName}, '%')
+            </if>
+        </where>
+        ORDER BY
+            CASE
+                WHEN download_name LIKE CONCAT(#{downloadName}, '%') THEN 1
+                WHEN download_name LIKE CONCAT('%', #{downloadName}, '%') THEN 2
+                ELSE 3
+            END,
+            download_name ASC
+        LIMIT #{limit}
+    </select>
 </mapper>

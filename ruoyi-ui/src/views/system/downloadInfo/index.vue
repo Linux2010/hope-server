@@ -116,7 +116,13 @@
       <el-table-column label="内容" align="center" prop="videoType" min-width="80"/>
       <el-table-column label="开关" align="center" prop="downloadEnable" min-width="60">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.download_enable" :value="scope.row.downloadEnable"/>
+          <el-switch
+            v-model="scope.row.downloadEnable"
+            active-value="true"
+            inactive-value="false"
+            @change="handleSwitchChange(scope.row)"
+            v-hasPermi="['system:downloadInfo:edit']">
+          </el-switch>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="140">
@@ -580,6 +586,14 @@ export default {
       } else {
         this.form.engineName = null;
       }
+    },
+    /** 切换开关状态 */
+    handleSwitchChange(row) {
+      updateDownloadInfo(row).then(() => {
+        this.$modal.msgSuccess(row.downloadEnable === "true" ? "启用成功" : "停用成功");
+      }).catch(() => {
+        row.downloadEnable = row.downloadEnable === "true" ? "false" : "true";
+      });
     }
   }
 };

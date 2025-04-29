@@ -104,7 +104,12 @@
     <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="引擎" align="center" prop="engineName"  width="90" />
-      <el-table-column label="名称" align="center" prop="channelName"  width="160"/>
+      <el-table-column label="名称" align="center" prop="channelName" width="160">
+        <template slot-scope="scope">
+          <a v-if="scope.row.channelUrl" :href="scope.row.channelUrl" target="_blank" style="color:#409EFF; text-decoration:underline;">{{ scope.row.channelName }}</a>
+          <span v-else>{{ scope.row.channelName }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="盈利" align="center" prop="gainStatus"  width="90" >
         <template slot-scope="scope">
           <dict-tag :options="dict.type.hope_gain_status" :value="scope.row.gainStatus"/>
@@ -117,7 +122,13 @@
       </el-table-column>
       <el-table-column label="开关" align="center" prop="channelOffOn" width="90" >
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.hope_channel_off_on" :value="scope.row.channelOffOn"/>
+          <el-switch
+            v-model="scope.row.channelOffOn"
+            active-value="on"
+            inactive-value="off"
+            @change="handleSwitchChange(scope.row)"
+            v-hasPermi="['system:channel:edit']">
+          </el-switch>
         </template>
       </el-table-column>
       <el-table-column label="cookie" align="center" prop="cookieEnable" width="90">
@@ -664,6 +675,14 @@ export default {
         } else {
           this.$message.error("获取引擎列表失败");
         }
+      });
+    },
+    /** 切换开关状态 */
+    handleSwitchChange(row) {
+      updateInfo(row).then(() => {
+        this.$modal.msgSuccess(row.channelOffOn === "on" ? "启用成功" : "停用成功");
+      }).catch(() => {
+        row.channelOffOn = row.channelOffOn === "on" ? "off" : "on";
       });
     },
   } 

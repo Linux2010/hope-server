@@ -2,6 +2,7 @@ package com.ruoyi.system.mapper;
 
 
 import com.ruoyi.system.domain.ChannelInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -60,4 +61,13 @@ public interface ChannelInfoMapper
      * @return 结果
      */
     public int deleteChannelInfoByChannelIds(Long[] channelIds);
+    
+    /**
+     * 模糊搜索频道名称
+     * 
+     * @param channelName 频道名称关键字
+     * @param limit 限制返回数量
+     * @return 符合条件的频道名称列表
+     */
+    public List<String> searchChannelNamesFuzzy(@Param("channelName") String channelName, @Param("limit") int limit);
 }

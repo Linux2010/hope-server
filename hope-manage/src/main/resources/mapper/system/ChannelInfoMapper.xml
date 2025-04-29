@@ -199,4 +199,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{channelId}
         </foreach>
     </delete>
+    
+    <!-- 模糊搜索频道名称 -->
+    <select id="searchChannelNamesFuzzy" resultType="String">
+        SELECT channel_name
+        FROM channel_info 
+        <where>
+            <!-- 模糊匹配频道名称 -->
+            <if test="channelName != null and channelName != ''">
+                channel_name LIKE concat('%', #{channelName}, '%')
+            </if>
+        </where>
+        ORDER BY
+            CASE
+                WHEN channel_name LIKE CONCAT(#{channelName}, '%') THEN 1
+                WHEN channel_name LIKE CONCAT('%', #{channelName}, '%') THEN 2
+                ELSE 3
+            END,
+            channel_name ASC
+        LIMIT #{limit}
+    </select>
 </mapper>

@@ -95,4 +95,28 @@ public class ChannelInfoController extends BaseController
     {
         return toAjax(channelInfoService.deleteChannelInfoByChannelIds(channelIds));
     }
+
+    /**
+     * 获取所有频道名称列表
+     */
+    @GetMapping("/listAllNames")
+    public AjaxResult listAllNames()
+    {
+        ChannelInfo query = new ChannelInfo();
+        // 只查询启用状态的频道
+        query.setChannelOffOn("0"); // 假设0表示启用状态 
+        List<ChannelInfo> list = channelInfoService.selectChannelInfoList(query);
+        List<String> channelNames = list.stream().map(ChannelInfo::getChannelName).collect(java.util.stream.Collectors.toList());
+        return success(channelNames);
+    }
+    
+    /**
+     * 模糊搜索频道名称，最多返回5条
+     */
+    @GetMapping("/searchNames")
+    public AjaxResult searchChannelNames(@RequestParam(value = "channelName", required = false) String channelName)
+    {
+        List<String> channelNames = channelInfoService.searchChannelNames(channelName, 5);
+        return success(channelNames);
+    }
 }

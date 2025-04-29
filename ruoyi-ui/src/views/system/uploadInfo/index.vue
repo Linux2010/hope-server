@@ -66,7 +66,13 @@
       <el-table-column label="频道名称" align="center" prop="channelName" min-width="140" />
       <el-table-column label="开关" align="center" prop="uploadEnable" width="80">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.uploadEnable"/>
+          <el-switch
+            v-model="scope.row.uploadEnable"
+            active-value="true"
+            inactive-value="false"
+            @change="handleSwitchChange(scope.row)"
+            v-hasPermi="['system:uploadInfo:edit']">
+          </el-switch>
         </template>
       </el-table-column>
       <el-table-column label="日上限" align="center" prop="uploadDayMax" width="80" />
@@ -112,7 +118,22 @@
                 <span>{{ form.downloadName }}</span>
               </template>
               <template v-else>
-                <el-input v-model="form.downloadName" placeholder="请输入下载名称" />
+                <el-select 
+                  v-model="form.downloadName" 
+                  placeholder="请选择下载名称" 
+                  filterable 
+                  clearable 
+                  remote
+                  :remote-method="remoteSearchDownload"
+                  :loading="downloadLoading"
+                  style="width: 100%">
+                  <el-option
+                    v-for="download in downloadOptions"
+                    :key="download"
+                    :label="download"
+                    :value="download"
+                  />
+                </el-select>
               </template>
             </el-form-item>
           </el-col>
@@ -125,7 +146,22 @@
                 <span>{{ form.channelName }}</span>
               </template>
               <template v-else>
-                <el-input v-model="form.channelName" placeholder="请输入频道名称" />
+                <el-select
+                  v-model="form.channelName"
+                  placeholder="请选择频道名称"
+                  filterable
+                  clearable
+                  remote
+                  :remote-method="remoteSearchChannel"
+                  :loading="channelLoading"
+                  style="width: 100%">
+                  <el-option
+                    v-for="channel in channelOptions"
+                    :key="channel"
+                    :label="channel"
+                    :value="channel"
+                  />
+                </el-select>
               </template>
             </el-form-item>
           </el-col>
@@ -234,13 +270,15 @@
 <script>
 import { listUploadInfo, getUploadInfo, delUploadInfo, addUploadInfo, updateUploadInfo } from "@/api/system/uploadInfo";
 import DictTag from "@/components/DictTag";
+import { listAllChannelNames, searchChannelNames } from "@/api/system/channel";
+import { listAllDownloadNames, searchDownloadNames } from "@/api/system/downloadInfo";
 
 export default {
   name: "UploadInfo",
   components: {
     DictTag
   },
-  dicts: ['sys_normal_disable'],
+  dicts: ['sys_normal_disable', 'hope_channel_off_on'],
   data() {
     return {
       // 遮罩层
@@ -263,6 +301,10 @@ export default {
       open: false,
       // 是否查看模式
       isView: false,
+      // 频道名称选项列表
+      channelOptions: [],
+      // 下载名称选项列表
+      downloadOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -275,11 +317,26 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+        uploadName: [
+          { required: true, message: "上传名称不能为空", trigger: "blur" }
+        ],
+        channelName: [
+          { required: true, message: "频道名称不能为空", trigger: "change" }
+        ],
+        downloadName: [
+          { required: true, message: "下载名称不能为空", trigger: "change" }
+        ]
+      },
+      // 远程搜索频道名称时的加载状态
+      channelLoading: false,
+      // 远程搜索下载名称时的加载状态
+      downloadLoading: false
     };
   },
   created() {
     this.getList();
+    this.getChannelOptions();
+    this.getDownloadOptions();
   },
   methods: {
     /** 查询上传管理列表 */
@@ -289,6 +346,18 @@ export default {
         this.uploadInfoList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    /** 获取频道名称选项 */
+    getChannelOptions() {
+      listAllChannelNames().then(response => {
+        this.channelOptions = response.data;
+      });
+    },
+    /** 获取下载名称选项 */
+    getDownloadOptions() {
+      listAllDownloadNames().then(response => {
+        this.downloadOptions = response.data;
       });
     },
     // 取消按钮
@@ -354,17 +423,41 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          // 验证必填字段
+          if (!this.form.channelName) {
+            this.$modal.msgError("请选择频道名称");
+            return;
+          }
+          if (!this.form.downloadName) {
+            this.$modal.msgError("请选择下载名称");
+            return;
+          }
+          
+          // 验证频道名称是否存在于选项中
+          if (this.form.channelName && this.channelOptions.indexOf(this.form.channelName) === -1) {
+            this.$modal.msgError("频道名称不存在或未启用，请从下拉列表中选择有效的频道名称");
+            return;
+          }
+          // 验证下载名称是否存在于选项中
+          if (this.form.downloadName && this.downloadOptions.indexOf(this.form.downloadName) === -1) {
+            this.$modal.msgError("下载名称不存在或未启用，请从下拉列表中选择有效的下载名称");
+            return;
+          }
           if (this.form.uploadId != null) {
             updateUploadInfo(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
+            }).catch(() => {
+              this.$modal.msgError("修改失败，请确保所有必填字段正确填写");
             });
           } else {
             addUploadInfo(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
+            }).catch(() => {
+              this.$modal.msgError("新增失败，请确保所有必填字段正确填写");
             });
           }
         }
@@ -389,6 +482,42 @@ export default {
         this.open = true;
         this.title = "查看上传管理";
         this.isView = true;
+      });
+    },
+    /** 远程搜索频道名称 */
+    remoteSearchChannel(query) {
+      if (query !== '') {
+        this.channelLoading = true;
+        searchChannelNames(query).then(response => {
+          this.channelOptions = response.data;
+          this.channelLoading = false;
+        }).catch(() => {
+          this.channelLoading = false;
+        });
+      } else {
+        this.getChannelOptions();
+      }
+    },
+    /** 远程搜索下载名称 */
+    remoteSearchDownload(query) {
+      if (query !== '') {
+        this.downloadLoading = true;
+        searchDownloadNames(query).then(response => {
+          this.downloadOptions = response.data;
+          this.downloadLoading = false;
+        }).catch(() => {
+          this.downloadLoading = false;
+        });
+      } else {
+        this.getDownloadOptions();
+      }
+    },
+    /** 切换开关状态 */
+    handleSwitchChange(row) {
+      updateUploadInfo(row).then(() => {
+        this.$modal.msgSuccess(row.uploadEnable === "true" ? "启用成功" : "停用成功");
+      }).catch(() => {
+        row.uploadEnable = row.uploadEnable === "true" ? "false" : "true";
       });
     }
   }

@@ -58,4 +58,13 @@ public interface IDownloadInfoService
      * @return 结果
      */
     public int deleteDownloadInfoByDownloadId(Long downloadId);
+    
+    /**
+     * 模糊搜索下载名称
+     * 
+     * @param downloadName 下载名称关键字
+     * @param limit 限制返回数量
+     * @return 符合条件的下载名称列表
+     */
+    public List<String> searchDownloadNames(String downloadName, int limit);
 }

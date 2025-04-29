@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 【下载管理】Service业务层处理
@@ -92,5 +93,18 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
     public int deleteChannelInfoByChannelId(Long channelId)
     {
         return channelInfoMapper.deleteChannelInfoByChannelId(channelId);
+    }
+    
+    /**
+     * 模糊搜索频道名称
+     *
+     * @param channelName 频道名称关键字
+     * @param limit 限制返回数量
+     * @return 符合条件的频道名称列表
+     */
+    @Override
+    public List<String> searchChannelNames(String channelName, int limit) {
+        // 直接调用Mapper方法，现在它已经返回String列表
+        return channelInfoMapper.searchChannelNamesFuzzy(channelName, limit);
     }
 }

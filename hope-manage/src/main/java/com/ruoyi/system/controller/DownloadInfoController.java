@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -100,5 +101,29 @@ public class DownloadInfoController extends BaseController
     public AjaxResult remove(@PathVariable Long[] downloadIds)
     {
         return toAjax(downloadInfoService.deleteDownloadInfoByDownloadIds(downloadIds));
+    }
+    
+    /**
+     * 获取所有下载名称列表
+     */
+    @GetMapping("/listAllNames")
+    public AjaxResult listAllNames()
+    {
+        DownloadInfo query = new DownloadInfo();
+        // 只查询启用状态的下载
+        query.setDownloadEnable("0"); // 假设0表示启用状态
+        List<DownloadInfo> list = downloadInfoService.selectDownloadInfoList(query);
+        List<String> downloadNames = list.stream().map(DownloadInfo::getDownloadName).collect(java.util.stream.Collectors.toList());
+        return success(downloadNames);
+    }
+    
+    /**
+     * 模糊搜索下载名称，最多返回5条
+     */
+    @GetMapping("/searchNames")
+    public AjaxResult searchDownloadNames(@RequestParam(value = "downloadName", required = false) String downloadName)
+    {
+        List<String> downloadNames = downloadInfoService.searchDownloadNames(downloadName, 5);
+        return success(downloadNames);
     }
 }
