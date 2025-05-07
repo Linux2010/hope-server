@@ -194,7 +194,7 @@
                 <span>{{ form.uploadShellPath }}</span>
               </template>
               <template v-else>
-                <el-input v-model="form.uploadShellPath" placeholder="请输入脚本路径" />
+                <el-input v-model="form.uploadShellPath" placeholder="系统自动设置" disabled />
               </template>
             </el-form-item>
           </el-col>
@@ -212,19 +212,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="item" prop="uploadItem">
-              <template v-if="isView">
-                <span>{{ form.uploadItem }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.uploadItem" placeholder="请输入item" />
-              </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        
-        <el-row :gutter="15">
-          <el-col :span="12">
             <el-form-item label="标签" prop="uploadLabel">
               <template v-if="isView">
                 <span>{{ form.uploadLabel }}</span>
@@ -234,13 +221,29 @@
               </template>
             </el-form-item>
           </el-col>
+        </el-row>
+        
+        <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="ok后缀" prop="uploadOk">
               <template v-if="isView">
                 <span>{{ form.uploadOk }}</span>
               </template>
               <template v-else>
-                <el-input v-model="form.uploadOk" placeholder="请输入ok后缀" />
+                <el-input v-model="form.uploadOk" placeholder="系统自动设置" disabled />
+              </template>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开关" prop="uploadEnable">
+              <template v-if="isView">
+                <span>{{ form.uploadEnable === 'true' ? '启用' : '停用' }}</span>
+              </template>
+              <template v-else>
+                <el-select v-model="form.uploadEnable" placeholder="请选择状态" style="width: 100%">
+                  <el-option label="启用" value="true"></el-option>
+                  <el-option label="停用" value="false"></el-option>
+                </el-select>
               </template>
             </el-form-item>
           </el-col>
@@ -268,7 +271,7 @@
 </template>
 
 <script>
-import { listUploadInfo, getUploadInfo, delUploadInfo, addUploadInfo, updateUploadInfo } from "@/api/system/uploadInfo";
+import { listUploadInfo, getUploadInfo, delUploadInfo, addUploadInfo, updateUploadInfo, getOkSuffix } from "@/api/system/uploadInfo";
 import DictTag from "@/components/DictTag";
 import { listAllChannelNames, searchChannelNames } from "@/api/system/channel";
 import { listAllDownloadNames, searchDownloadNames } from "@/api/system/downloadInfo";
@@ -337,6 +340,7 @@ export default {
     this.getList();
     this.getChannelOptions();
     this.getDownloadOptions();
+    this.getConfigOkSuffix();
   },
   methods: {
     /** 查询上传管理列表 */
@@ -360,6 +364,14 @@ export default {
         this.downloadOptions = response.data;
       });
     },
+    /** 获取ok后缀配置 */
+    getConfigOkSuffix() {
+      getOkSuffix().then(response => {
+        if (response.code === 200) {
+          this.form.uploadOk = response.data;
+        }
+      });
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -375,7 +387,6 @@ export default {
         uploadPath: null,
         uploadShellPath: null,
         uploadPlayList: null,
-        uploadItem: null,
         uploadLabel: null,
         uploadDesc: null,
         downloadName: null,
@@ -386,6 +397,8 @@ export default {
       };
       this.resetForm("form");
       this.isView = false;
+      // 重置后重新获取ok后缀
+      this.getConfigOkSuffix();
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -408,6 +421,7 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加上传管理";
+      this.getConfigOkSuffix();
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

@@ -5,7 +5,9 @@ import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.UploadInfoMapper;
+import com.ruoyi.system.mapper.ChannelInfoMapper;
 import com.ruoyi.system.domain.UploadInfo;
+import com.ruoyi.system.domain.ChannelInfo;
 import com.ruoyi.system.service.IUploadInfoService;
 
 /**
@@ -19,6 +21,9 @@ public class UploadInfoServiceImpl implements IUploadInfoService
 {
     @Autowired
     private UploadInfoMapper uploadInfoMapper;
+    
+    @Autowired
+    private ChannelInfoMapper channelInfoMapper;
 
     /**
      * 查询上传管理
@@ -91,5 +96,18 @@ public class UploadInfoServiceImpl implements IUploadInfoService
     public int deleteUploadInfoByUploadId(Long uploadId)
     {
         return uploadInfoMapper.deleteUploadInfoByUploadId(uploadId);
+    }
+    
+    /**
+     * 根据频道名称获取频道类型
+     * 
+     * @param channelName 频道名称
+     * @return 频道类型
+     */
+    @Override
+    public String getChannelTypeByName(String channelName)
+    {
+        ChannelInfo channelInfo = channelInfoMapper.selectChannelInfoByName(channelName);
+        return channelInfo != null ? channelInfo.getChannelType() : null;
     }
 }

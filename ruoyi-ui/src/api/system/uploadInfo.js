@@ -42,3 +42,27 @@ export function delUploadInfo(uploadId) {
     method: 'delete'
   })
 }
+
+// 获取ok后缀
+export function getOkSuffix() {
+  return request({
+    url: '/system/uploadInfo/okSuffix',
+    method: 'get'
+  })
+}
+
+// 获取所有上传脚本路径配置
+export function getUploadScripts() {
+  return request({
+    url: '/system/uploadInfo/uploadScripts',
+    method: 'get'
+  })
+}
+
+// 获取指定类型的脚本路径
+export function getScriptPathByType(type) {
+  return request({
+    url: '/system/uploadInfo/scriptPath/' + type,
+    method: 'get'
+  })
+}

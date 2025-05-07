@@ -12,6 +12,13 @@ ruoyi:
   addressEnabled: false
   # 验证码类型 math 数字计算 char 字符验证
   captchaType: math
+  # ok文件后缀
+  okSuffix: .ok
+  # 上传脚本路径配置
+  uploadScripts:
+    youtube: video-upload/you-upload/you_upload.py
+    bili: video-upload/bili-upload/bili_upload_v2.py
+    xigua: video-upload/xigua-upload/xigua_upload.py
 
 # 开发环境配置
 server:

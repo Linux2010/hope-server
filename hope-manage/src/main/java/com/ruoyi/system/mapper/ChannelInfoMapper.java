@@ -23,6 +23,14 @@ public interface ChannelInfoMapper
     public ChannelInfo selectChannelInfoByChannelId(Long channelId);
 
     /**
+     * 根据频道名称查询频道信息
+     * 
+     * @param channelName 频道名称
+     * @return 频道信息
+     */
+    public ChannelInfo selectChannelInfoByName(@Param("channelName") String channelName);
+
+    /**
      * 查询【下载管理】列表
      * 
      * @param channelInfo 【下载管理】

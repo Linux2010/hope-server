@@ -103,6 +103,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where channel_id = #{channelId}
     </select>
 
+    <select id="selectChannelInfoByName" parameterType="String" resultMap="ChannelInfoResult">
+        <include refid="selectChannelInfoVo"/>
+        where channel_name = #{channelName}
+    </select>
+
     <insert id="insertChannelInfo" parameterType="ChannelInfo" useGeneratedKeys="true" keyProperty="channelId">
         insert into channel_info
         <trim prefix="(" suffix=")" suffixOverrides=",">

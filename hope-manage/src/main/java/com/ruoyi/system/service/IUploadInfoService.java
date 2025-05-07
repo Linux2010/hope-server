@@ -58,4 +58,12 @@ public interface IUploadInfoService
      * @return 结果
      */
     public int deleteUploadInfoByUploadId(Long uploadId);
+    
+    /**
+     * 根据频道名称获取频道类型
+     * 
+     * @param channelName 频道名称
+     * @return 频道类型
+     */
+    public String getChannelTypeByName(String channelName);
 }
