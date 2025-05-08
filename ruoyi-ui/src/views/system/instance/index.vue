@@ -85,27 +85,22 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="instanceList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="instanceList" @selection-change="handleSelectionChange" row-style="{ height: '40px' }">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="instanceId" />
-      <el-table-column label="频道名称" align="center" prop="channelName" />
-      <el-table-column label="上传名称" align="center" prop="uploadName" />
-      <el-table-column label="下载名称" align="center" prop="downloadName" />
-      <el-table-column label="频道类型" align="center" prop="channelType" />
-      <el-table-column label="上传状态" align="center" prop="status" />
-      <el-table-column label="上传日期" align="center" prop="uploadDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.uploadDate, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="视频名称" align="center" prop="videoName" />
+      <el-table-column label="频道名称" align="center" prop="channelName" width="120" show-overflow-tooltip />
+      <el-table-column label="上传名称" align="center" prop="uploadName" width="120" show-overflow-tooltip />
+      <el-table-column label="下载名称" align="center" prop="downloadName" width="120" show-overflow-tooltip />
+      <el-table-column label="频道类型" align="center" prop="channelType" width="100" show-overflow-tooltip />
+      <el-table-column label="上传状态" align="center" prop="status" width="100" show-overflow-tooltip />
+      <el-table-column label="上传日期" align="center" prop="uploadDate" width="180" show-overflow-tooltip />
+      <el-table-column label="视频名称" align="center" prop="videoName" width="120" show-overflow-tooltip />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="视频URL" align="center" prop="videoUrl" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="视频URL" align="center" prop="videoUrl" width="200" show-overflow-tooltip />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="160">
         <template slot-scope="scope">
           <el-button
             size="mini"
