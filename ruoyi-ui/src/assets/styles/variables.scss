@@ -38,6 +38,10 @@ $base-sub-menu-hover:#001528;
 
 $base-sidebar-width: 200px;
 
+$base-menu-black-background: #000000;
+$base-menu-black-color: #E8E8E8;
+$base-logo-black-title-color: #E8E8E8;
+
 // the :export directive is the magic sauce for webpack
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
@@ -50,5 +54,8 @@ $base-sidebar-width: 200px;
   subMenuHover: $base-sub-menu-hover;
   sideBarWidth: $base-sidebar-width;
   logoTitleColor: $base-logo-title-color;
-  logoLightTitleColor: $base-logo-light-title-color
+  logoLightTitleColor: $base-logo-light-title-color;
+  menuBlackBackground: $base-menu-black-background;
+  menuBlackColor: $base-menu-black-color;
+  logoBlackTitleColor: $base-logo-black-title-color;
 }

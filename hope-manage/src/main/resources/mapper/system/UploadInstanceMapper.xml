@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UploadInstanceMapper">
+    
+    <resultMap type="UploadInstance" id="UploadInstanceResult">
+        <result property="instanceId"    column="instance_id"    />
+        <result property="channelName"    column="channel_name"    />
+        <result property="uploadName"    column="upload_name"    />
+        <result property="downloadName"    column="download_name"    />
+        <result property="channelType"    column="channel_type"    />
+        <result property="status"    column="status"    />
+        <result property="uploadDate"    column="upload_date"    />
+        <result property="videoName"    column="video_name"    />
+        <result property="uploadCmd"    column="upload_cmd"    />
+        <result property="uploadLog"    column="upload_log"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="videoUrl"    column="video_url"    />
+        <result property="uploadOverflow"    column="upload_overflow"    />
+        <result property="videoPath"    column="video_path"    />
+        <result property="engineName"    column="engine_name"    />
+        <result property="videoFile"    column="video_file"    />
+        <result property="videoMd5"    column="video_md5"    />
+        <result property="channelId"    column="channel_id"    />
+        <result property="downloadId"    column="download_id"    />
+        <result property="isPublic"    column="is_public"    />
+    </resultMap>
+
+    <sql id="selectUploadInstanceVo">
+        select instance_id, channel_name, upload_name, download_name, channel_type, status, upload_date, video_name, upload_cmd, upload_log, create_time, modify_time, video_url, upload_overflow, video_path, engine_name, video_file, video_md5, channel_id, download_id, is_public from upload_instance
+    </sql>
+
+    <select id="selectUploadInstanceList" parameterType="UploadInstance" resultMap="UploadInstanceResult">
+        <include refid="selectUploadInstanceVo"/>
+        <where>  
+            <if test="channelName != null  and channelName != ''"> and channel_name like concat('%', #{channelName}, '%')</if>
+            <if test="downloadName != null  and downloadName != ''"> and download_name like concat('%', #{downloadName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="uploadDate != null  and uploadDate != ''"> and upload_date = #{uploadDate}</if>
+            <if test="videoName != null  and videoName != ''"> and video_name like concat('%', #{videoName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectUploadInstanceByInstanceId" parameterType="String" resultMap="UploadInstanceResult">
+        <include refid="selectUploadInstanceVo"/>
+        where instance_id = #{instanceId}
+    </select>
+
+    <insert id="insertUploadInstance" parameterType="UploadInstance">
+        insert into upload_instance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="instanceId != null">instance_id,</if>
+            <if test="channelName != null">channel_name,</if>
+            <if test="uploadName != null">upload_name,</if>
+            <if test="downloadName != null">download_name,</if>
+            <if test="channelType != null">channel_type,</if>
+            <if test="status != null">status,</if>
+            <if test="uploadDate != null">upload_date,</if>
+            <if test="videoName != null">video_name,</if>
+            <if test="uploadCmd != null">upload_cmd,</if>
+            <if test="uploadLog != null">upload_log,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="modifyTime != null">modify_time,</if>
+            <if test="videoUrl != null">video_url,</if>
+            <if test="uploadOverflow != null">upload_overflow,</if>
+            <if test="videoPath != null">video_path,</if>
+            <if test="engineName != null">engine_name,</if>
+            <if test="videoFile != null">video_file,</if>
+            <if test="videoMd5 != null">video_md5,</if>
+            <if test="channelId != null">channel_id,</if>
+            <if test="downloadId != null">download_id,</if>
+            <if test="isPublic != null">is_public,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="instanceId != null">#{instanceId},</if>
+            <if test="channelName != null">#{channelName},</if>
+            <if test="uploadName != null">#{uploadName},</if>
+            <if test="downloadName != null">#{downloadName},</if>
+            <if test="channelType != null">#{channelType},</if>
+            <if test="status != null">#{status},</if>
+            <if test="uploadDate != null">#{uploadDate},</if>
+            <if test="videoName != null">#{videoName},</if>
+            <if test="uploadCmd != null">#{uploadCmd},</if>
+            <if test="uploadLog != null">#{uploadLog},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+            <if test="videoUrl != null">#{videoUrl},</if>
+            <if test="uploadOverflow != null">#{uploadOverflow},</if>
+            <if test="videoPath != null">#{videoPath},</if>
+            <if test="engineName != null">#{engineName},</if>
+            <if test="videoFile != null">#{videoFile},</if>
+            <if test="videoMd5 != null">#{videoMd5},</if>
+            <if test="channelId != null">#{channelId},</if>
+            <if test="downloadId != null">#{downloadId},</if>
+            <if test="isPublic != null">#{isPublic},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUploadInstance" parameterType="UploadInstance">
+        update upload_instance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="channelName != null">channel_name = #{channelName},</if>
+            <if test="uploadName != null">upload_name = #{uploadName},</if>
+            <if test="downloadName != null">download_name = #{downloadName},</if>
+            <if test="channelType != null">channel_type = #{channelType},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="uploadDate != null">upload_date = #{uploadDate},</if>
+            <if test="videoName != null">video_name = #{videoName},</if>
+            <if test="uploadCmd != null">upload_cmd = #{uploadCmd},</if>
+            <if test="uploadLog != null">upload_log = #{uploadLog},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime},</if>
+            <if test="videoUrl != null">video_url = #{videoUrl},</if>
+            <if test="uploadOverflow != null">upload_overflow = #{uploadOverflow},</if>
+            <if test="videoPath != null">video_path = #{videoPath},</if>
+            <if test="engineName != null">engine_name = #{engineName},</if>
+            <if test="videoFile != null">video_file = #{videoFile},</if>
+            <if test="videoMd5 != null">video_md5 = #{videoMd5},</if>
+            <if test="channelId != null">channel_id = #{channelId},</if>
+            <if test="downloadId != null">download_id = #{downloadId},</if>
+            <if test="isPublic != null">is_public = #{isPublic},</if>
+        </trim>
+        where instance_id = #{instanceId}
+    </update>
+
+    <delete id="deleteUploadInstanceByInstanceId" parameterType="String">
+        delete from upload_instance where instance_id = #{instanceId}
+    </delete>
+
+    <delete id="deleteUploadInstanceByInstanceIds" parameterType="String">
+        delete from upload_instance where instance_id in 
+        <foreach item="instanceId" collection="array" open="(" separator="," close=")">
+            #{instanceId}
+        </foreach>
+    </delete>
+</mapper>

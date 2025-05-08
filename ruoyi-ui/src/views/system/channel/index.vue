@@ -103,24 +103,24 @@
 
     <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="引擎" align="center" prop="engineName"  width="90" />
+      <el-table-column label="引擎" align="center" prop="engineName"  width="80" />
       <el-table-column label="名称" align="center" prop="channelName" width="160">
         <template slot-scope="scope">
           <a v-if="scope.row.channelUrl" :href="scope.row.channelUrl" target="_blank" style="color:#409EFF; text-decoration:underline;">{{ scope.row.channelName }}</a>
           <span v-else>{{ scope.row.channelName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="盈利" align="center" prop="gainStatus"  width="90" >
+      <el-table-column label="盈利" align="center" prop="gainStatus"  width="80" >
         <template slot-scope="scope">
           <dict-tag :options="dict.type.hope_gain_status" :value="scope.row.gainStatus"/>
         </template>
       </el-table-column>
-      <el-table-column label="类型" align="center" prop="channelType" width="90">
+      <el-table-column label="类型" align="center" prop="channelType" width="80">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.channel_type" :value="scope.row.channelType"/>
         </template>
       </el-table-column>
-      <el-table-column label="开关" align="center" prop="channelOffOn" width="90" >
+      <el-table-column label="开关" align="center" prop="channelOffOn" width="80" >
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.channelOffOn"
@@ -131,18 +131,24 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="cookie" align="center" prop="cookieEnable" width="90">
+      <el-table-column label="cookie" align="center" prop="cookieEnable" width="80">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.hope_cookie_enable" :value="scope.row.cookieEnable"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180" sortable="custom">
+      <el-table-column label="创建时间" align="center" prop="createTime" width="120" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机" align="center" prop="phone" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="手机" align="center" prop="phone"  width="120" />
+      <el-table-column label="接码" align="center" prop="assistEmail" width="80">
+        <template slot-scope="scope">
+          <a v-if="scope.row.assistEmail" :href="scope.row.assistEmail" target="_blank" style="color:#409EFF; text-decoration:underline;">接码</a>
+          <span v-else>无</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" class-name="small-padding">
 
         <template slot-scope="scope">
           <el-button
@@ -335,10 +341,10 @@
 
         <el-row :gutter="15">
           <el-col :span="12">
-            <el-form-item label="辅助邮箱" prop="assistEmail">
-              <template v-if="isView">
-                <span>{{ form.assistEmail }}</span>
-              </template>
+        <el-form-item label="接码地址" prop="assistEmail">
+          <template v-if="isView">
+            <el-link :href="form.assistEmail" target="_blank" :underline="false" style="color:#409EFF;">{{ form.assistEmail }}</el-link>
+          </template>
               <template v-else>
                 <el-input v-model="form.assistEmail" placeholder="请输入辅助邮箱" />
               </template>
@@ -368,10 +374,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="登录地址" prop="loginUrl">
-              <template v-if="isView">
-                <span>{{ form.loginUrl }}</span>
-              </template>
+        <el-form-item label="登录地址" prop="loginUrl">
+          <template v-if="isView">
+            <el-link :href="form.loginUrl" target="_blank" :underline="false" style="color:#409EFF;">{{ form.loginUrl }}</el-link>
+          </template>
               <template v-else>
                 <el-input v-model="form.loginUrl" placeholder="请输入登录地址" />
               </template>
@@ -381,14 +387,14 @@
 
         <el-row :gutter="15">
           <el-col :span="12">
-            <el-form-item label="主页地址" prop="homeUrl">
-              <template v-if="isView">
-                <span>{{ form.homeUrl }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.homeUrl" placeholder="请输入主页地址" />
-              </template>
-            </el-form-item>
+        <el-form-item label="主页地址" prop="homeUrl">
+          <template v-if="isView">
+            <el-link :href="form.homeUrl" target="_blank" :underline="false" style="color:#409EFF;">{{ form.homeUrl }}</el-link>
+          </template>
+          <template v-else>
+            <el-input v-model="form.homeUrl" placeholder="请输入主页地址" />
+          </template>
+        </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Cookie域名" prop="cookieDomain">
@@ -419,9 +425,9 @@
         <el-row :gutter="15">
           <el-col :span="24">
             <el-form-item label="频道地址" prop="channelUrl">
-              <template v-if="isView">
-                <span>{{ form.channelUrl }}</span>
-              </template>
+          <template v-if="isView">
+            <el-link :href="form.channelUrl" target="_blank" :underline="false" style="color:#409EFF;">{{ form.channelUrl }}</el-link>
+          </template>
               <template v-else>
                 <el-input v-model="form.channelUrl" type="textarea" :rows="2" placeholder="请输入频道地址" />
               </template>
@@ -688,4 +694,3 @@ export default {
   } 
 };
 </script>
-
