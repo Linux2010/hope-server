@@ -69,4 +69,6 @@ public interface IChannelInfoService
      * @return 符合条件的频道名称列表
      */
     public List<String> searchChannelNames(String channelName, int limit);
+
+    void openBack(String channelType, String channelName);
 }

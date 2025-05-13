@@ -4,7 +4,9 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.system.domain.ChannelInfo;
 import com.ruoyi.system.mapper.ChannelInfoMapper;
 import com.ruoyi.system.service.IChannelInfoService;
+import com.ruoyi.system.utils.ShellUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -106,5 +108,26 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
     public List<String> searchChannelNames(String channelName, int limit) {
         // 直接调用Mapper方法，现在它已经返回String列表
         return channelInfoMapper.searchChannelNamesFuzzy(channelName, limit);
+    }
+
+
+    @Value("${hope.engine-shell-path}")
+    private String engineShellPath;
+
+    @Override
+    public void openBack(String channelType, String channelName) {
+        String cmd = null;
+        if ("youtube".equals(channelType)) {
+            ShellUtils.execCmd(engineShellPath + "/stop-cmd.sh go_youtube");
+            cmd = engineShellPath + "/go_youtube.sh " + channelName;
+        } else if ("bili".equals(channelType)) {
+            ShellUtils.execCmd(engineShellPath + "/stop-cmd.sh go_bili");
+            cmd = engineShellPath + "/go_bili.sh " + channelName;
+        } else {
+            ShellUtils.execCmd(engineShellPath + "/stop-cmd.sh go_channel");
+            cmd = engineShellPath + "/go_channel.sh " + channelName;
+        }
+        ShellUtils.log.info("execCmd: [{}]", cmd);
+        ShellUtils.execCmd(cmd);
     }
 }

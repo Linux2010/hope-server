@@ -142,14 +142,7 @@
         </template>
       </el-table-column>
       <el-table-column label="手机" align="center" prop="phone"  width="120" />
-      <el-table-column label="接码" align="center" prop="assistEmail" width="80">
-        <template slot-scope="scope">
-          <a v-if="scope.row.assistEmail" :href="scope.row.assistEmail" target="_blank" style="color:#409EFF; text-decoration:underline;">接码</a>
-          <span v-else>无</span>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding">
-
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -166,6 +159,7 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:channel:edit']"
           >修改</el-button>
+
           <el-button
             size="mini"
             type="text"
@@ -173,6 +167,22 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:channel:remove']"
           >删除</el-button>
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-video-play"
+            @click="handleBackendAction(scope.row)"
+            v-hasPermi="['system:channel:execute']"
+          >后台</el-button>
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-document"
+            @click="handleAssistEmailClick(scope.row)"
+            v-hasPermi="['system:channel:assistEmail']"
+          >接码</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -444,7 +454,7 @@
 </template>
 
 <script>
-import { listInfo, getInfo, delInfo, addInfo, updateInfo, listEngine, listAllEngines } from "@/api/system/channel";
+import { listInfo, getInfo, delInfo, addInfo, updateInfo, listEngine, listAllEngines, openBack } from "@/api/system/channel";
 
 export default {
   name: "Info",
@@ -691,6 +701,27 @@ export default {
         row.channelOffOn = row.channelOffOn === "on" ? "off" : "on";
       });
     },
+
+    handleBackendAction(row) {
+      // 调用后端API触发shell脚本执行（需后端配合）
+      // 示例：假设存在/api/channel/execute接口
+      if (!row.channelType || !row.channelName) {
+        this.$modal.msgError("频道类型和频道名称不能为空");
+        return;
+      }
+      openBack(row.channelType, row.channelName)
+        .then(() => this.$modal.msgSuccess("启动后台实例成功"))
+        .catch(() => this.$modal.msgError("启动后台实例失败"));
+    },
+
+    /** 接码点击事件 */
+    handleAssistEmailClick(row) {
+      if (row.assistEmail) {
+        window.open(row.assistEmail, '_blank');
+      } else {
+        this.$modal.msgWarning("接码URL为空");
+      }
+    }
   } 
 };
 </script>

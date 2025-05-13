@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -118,5 +119,21 @@ public class ChannelInfoController extends BaseController
     {
         List<String> channelNames = channelInfoService.searchChannelNames(channelName, 5);
         return success(channelNames);
+    }
+
+
+
+    @PostMapping("/openBack/{channelType}/{channelName}")
+    @PreAuthorize("@ss.hasPermi('system:channel:openBack')")
+    public AjaxResult openBack(@NotBlank(message = "{required}") @PathVariable String channelType, @NotBlank(message = "{required}") @PathVariable String channelName) {
+
+        try {
+            channelInfoService.openBack(channelType, channelName);
+            return success("启动成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return error("启动失败");
+        }
+
     }
 }

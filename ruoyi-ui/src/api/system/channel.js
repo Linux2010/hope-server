@@ -43,6 +43,15 @@ export function delInfo(channelId) {
   })
 }
 
+// 启动后台实例
+export function openBack(channelType, channelName) {
+  return request({
+    url: `/system/channel/openBack/${channelType}/${channelName}`,
+    method: 'post',
+    data: {}
+  })
+}
+
 // 查询引擎列表
 export function listEngine(query) {
   return request({
