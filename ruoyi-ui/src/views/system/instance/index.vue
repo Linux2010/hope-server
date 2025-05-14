@@ -1,23 +1,7 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="频道名称" prop="channelName">
-        <el-input
-          v-model="queryParams.channelName"
-          placeholder="请输入频道名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="下载名称" prop="downloadName">
-        <el-input
-          v-model="queryParams.downloadName"
-          placeholder="请输入下载名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="上传日期" prop="uploadDate">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch">
+      <el-form-item prop="uploadDate">
         <el-date-picker clearable
           v-model="queryParams.uploadDate"
           type="date"
@@ -25,7 +9,7 @@
           placeholder="请选择上传日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="视频名称" prop="videoName">
+      <el-form-item prop="videoName">
         <el-input
           v-model="queryParams.videoName"
           placeholder="请输入视频名称"
@@ -39,51 +23,9 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:instance:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:instance:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:instance:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:instance:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+<el-row :gutter="10" class="mb8">
+  <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+</el-row>
 
     <el-table v-loading="loading" :data="instanceList" @selection-change="handleSelectionChange" row-style="{ height: '40px' }">
       <el-table-column type="selection" width="55" align="center" />
@@ -100,22 +42,10 @@
         </template>
       </el-table-column>
       <el-table-column label="视频URL" align="center" prop="videoUrl" width="200" show-overflow-tooltip />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="160">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:instance:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:instance:remove']"
-          >删除</el-button>
+      <el-table-column label="操作" align="center" width="200">
+        <template slot-scope="{row}">
+          <el-button size="mini" @click="showLog(row)">日志</el-button>
+          <el-button size="mini" @click="handleDeleteNoConfirm(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -128,13 +58,11 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改上传实例对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+    <el-dialog title="日志详情" :visible.sync="logDialogVisible" width="60%">
+      <div style="height: 400px; overflow-y: auto; white-space: pre-wrap; background-color: #f4f4f4; padding: 10px; border-radius: 5px;">
+        <p style="margin-bottom: 10px;"><strong>上传命令:</strong> {{ selectedRow.uploadCmd }}</p>
+        <p style="white-space: pre-line;"><strong>日志信息:</strong>
+          <br>{{ selectedRow.uploadLog }}</p>
       </div>
     </el-dialog>
   </div>
@@ -179,7 +107,9 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      logDialogVisible: false,
+      selectedRow: {}
     };
   },
   created() {
@@ -294,6 +224,17 @@ export default {
       this.download('system/instance/export', {
         ...this.queryParams
       }, `instance_${new Date().getTime()}.xlsx`)
+    },
+    showLog(row) {
+      this.selectedRow = row;
+      this.logDialogVisible = true;
+    },
+    handleDeleteNoConfirm(row) {
+      const instanceIds = row.instanceId || this.ids;
+      delInstance(instanceIds).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
+      });
     }
   }
 };

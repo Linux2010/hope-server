@@ -41,6 +41,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="uploadDate != null  and uploadDate != ''"> and upload_date = #{uploadDate}</if>
             <if test="videoName != null  and videoName != ''"> and video_name like concat('%', #{videoName}, '%')</if>
         </where>
+        <choose>
+            <when test="channelName != null or downloadName != null or status != null or uploadDate != null or videoName != null">
+                order by upload_date desc
+            </when>
+            <otherwise>
+                order by upload_date desc
+            </otherwise>
+        </choose>
     </select>
     
     <select id="selectUploadInstanceByInstanceId" parameterType="String" resultMap="UploadInstanceResult">
