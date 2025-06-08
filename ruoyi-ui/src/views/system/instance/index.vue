@@ -9,6 +9,16 @@
           placeholder="请选择上传日期">
         </el-date-picker>
       </el-form-item>
+      <el-form-item prop="status">
+        <el-select v-model="queryParams.status" placeholder="上传状态" clearable style="width: 120px">
+          <el-option
+            v-for="dict in dict.type.status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>      
       <el-form-item prop="videoName">
         <el-input
           v-model="queryParams.videoName"
@@ -33,12 +43,16 @@
       <el-table-column label="上传名称" align="center" prop="uploadName" width="120" show-overflow-tooltip />
       <el-table-column label="下载名称" align="center" prop="downloadName" width="120" show-overflow-tooltip />
       <el-table-column label="频道类型" align="center" prop="channelType" width="100" show-overflow-tooltip />
-      <el-table-column label="上传状态" align="center" prop="status" width="100" show-overflow-tooltip />
+      <el-table-column label="上传状态" align="center" prop="status" width="100" show-overflow-tooltip >
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
       <el-table-column label="上传日期" align="center" prop="uploadDate" width="180" show-overflow-tooltip />
       <el-table-column label="视频名称" align="center" prop="videoName" width="120" show-overflow-tooltip />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+        <template slot-scope="{row}">
+          <span>{{ parseTime(row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="视频URL" align="center" prop="videoUrl" width="200" show-overflow-tooltip />
@@ -73,6 +87,7 @@ import { listInstance, getInstance, delInstance, addInstance, updateInstance } f
 
 export default {
   name: "Instance",
+  dicts: ['status'],
   data() {
     return {
       // 遮罩层
