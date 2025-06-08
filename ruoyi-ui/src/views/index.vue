@@ -1,31 +1,38 @@
 <template>
   <div class="dashboard-editor-container">
+    <el-tabs v-model="activeTab" @tab-click="handleTabClick" type="border-card">
+      <el-tab-pane label="Tab1" name="tab1">
+        <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
-    <panel-group @handleSetLineChartData="handleSetLineChartData" />
+        <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+          <line-chart :chart-data="lineChartData" />
+        </el-row>
 
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
-    </el-row>
-
-    <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <raddar-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <pie-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <bar-chart />
-        </div>
-      </el-col>
-    </el-row>
-
-
+        <el-row :gutter="32">
+          <el-col :xs="24" :sm="24" :lg="8">
+            <div class="chart-wrapper">
+              <raddar-chart />
+            </div>
+          </el-col>
+          <el-col :xs="24" :sm="24" :lg="8">
+            <div class="chart-wrapper">
+              <pie-chart />
+            </div>
+          </el-col>
+          <el-col :xs="24" :sm="24" :lg="8">
+            <div class="chart-wrapper">
+              <bar-chart />
+            </div>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
+      <el-tab-pane label="Tab2" name="tab2">
+        <!-- Tab2 content -->
+      </el-tab-pane>
+      <el-tab-pane label="Tab3" name="tab3">
+        <!-- Tab3 content -->
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -66,12 +73,17 @@ export default {
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+      lineChartData: lineChartData.newVisitis,
+      activeTab: 'tab1'
     }
   },
   methods: {
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
+    },
+    handleTabClick(tab, event) {
+      // You can add logic here to load content based on the tab
+      console.log('Tab clicked:', tab.name);
     }
   }
 }
@@ -79,7 +91,7 @@ export default {
 
 <style lang="scss" scoped>
 .dashboard-editor-container {
-  padding: 32px;
+  padding: 16px;
   background-color: rgb(240, 242, 245);
   position: relative;
 

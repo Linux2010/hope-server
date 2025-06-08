@@ -10,7 +10,7 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item prop="status">
-        <el-select v-model="queryParams.status" placeholder="上传状态" clearable style="width: 120px">
+        <el-select v-model="queryParams.status" placeholder="上传状态" clearable style="width: 120px" @change="handleQuery">
           <el-option
             v-for="dict in dict.type.status"
             :key="dict.value"
