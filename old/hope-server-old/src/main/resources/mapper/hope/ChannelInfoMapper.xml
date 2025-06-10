@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.hope.dao.ChannelInfoMapper">
+    <resultMap type="cc.mrbird.febs.hope.domain.ChannelInfo" id="ChannelInfoMap">
+        <id property="channelId" column="channel_id" jdbcType="INTEGER"/>
+        <result property="channelName" column="channel_name" jdbcType="VARCHAR"/>
+        <result property="channelType" column="channel_type" jdbcType="VARCHAR"/>
+        <result property="channelOffOn" column="channel_off_on" jdbcType="VARCHAR"/>
+        <result property="cookieEnable" column="cookie_enable" jdbcType="VARCHAR"/>
+        <result property="cookieJson" column="cookie_json" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="loginUrl" column="login_url" jdbcType="VARCHAR"/>
+        <result property="homeUrl" column="home_url" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="assistEmail" column="assist_email" jdbcType="VARCHAR"/>
+        <result property="channelDesc" column="channel_desc" jdbcType="VARCHAR"/>
+        <result property="channelUrl" column="channel_url" jdbcType="VARCHAR"/>
+        <result property="cookieDomain" column="cookie_domain" jdbcType="VARCHAR"/>
+        <result property="dayMax" column="day_max" jdbcType="VARCHAR"/>
+        <result property="titleLimit" column="title_limit" jdbcType="VARCHAR"/>
+        <result property="gainStatus" column="gain_status" jdbcType="VARCHAR"/>
+        <result property="downloadCount" column="download_count" jdbcType="INTEGER"/>
+        <result property="sumDayMax" column="sum_day_max" jdbcType="INTEGER"/>
+        <result property="engineId" column="engine_id" jdbcType="INTEGER"/>
+        <result property="engineName" column="engine_name" jdbcType="VARCHAR"/>
+        <result property="accDue" column="acc_due" jdbcType="TIMESTAMP"/>
+
+    </resultMap>
+
+
+    <!--查询主数据列表-->
+    <select id="queryList" resultMap="ChannelInfoMap" parameterType="channelInfo">
+        select ci.channel_name,
+        ci.assist_email,
+        ci.channel_desc,
+        ci.channel_id ,
+        ci.channel_off_on ,
+        ci.channel_type ,
+        ci.channel_url ,
+        ci.cookie_domain ,
+        ci.cookie_enable ,
+        ci.create_time ,
+        ci.day_max ,
+        ci.email ,
+        ci.home_url ,
+        ci.login_url ,
+        ci.modify_time ,
+        ci.`password` ,
+        ci.phone ,
+        ci.title_limit ,
+        ci.gain_status,
+        ci.engine_id,
+        ci.username ,
+        ci.acc_due ,
+        ei.engine_name,
+        count(ui.channel_name) AS download_count,
+        sum(ui.upload_day_max) AS sum_day_max
+        FROM channel_info ci
+        left join upload_info ui on ci.channel_name = ui.channel_name
+        inner join engine_info ei on ei.engine_id = ci.engine_id
+        WHERE 1 = 1
+        <if test="channelInfo.channelId != null">
+            and ci.channel_id = #{channelInfo.channelId}
+        </if>
+        <if test="channelInfo.channelName != null and channelInfo.channelName != ''">
+            and ci.channel_name like concat('%', #{channelInfo.channelName}, '%')
+        </if>
+        <if test="channelInfo.channelType != null and channelInfo.channelType != ''">
+            and ci.channel_type = #{channelInfo.channelType}
+        </if>
+        <if test="channelInfo.channelOffOn != null and channelInfo.channelOffOn != ''">
+            and ci.channel_off_on = #{channelInfo.channelOffOn}
+        </if>
+        <if test="channelInfo.cookieEnable != null and channelInfo.cookieEnable != ''">
+            and ci.cookie_enable = #{channelInfo.cookieEnable}
+        </if>
+        <if test="channelInfo.createTime != null">
+            and ci.create_time = #{channelInfo.createTime}
+        </if>
+        <if test="channelInfo.username != null and channelInfo.username != ''">
+            and ci.username = #{channelInfo.username}
+        </if>
+        <if test="channelInfo.phone != null and channelInfo.phone != ''">
+            and ci.phone = #{channelInfo.phone}
+        </if>
+        <if test="channelInfo.email != null and channelInfo.email != ''">
+            and ci.email = #{channelInfo.email}
+        </if>
+        <if test="channelInfo.channelDesc != null and channelInfo.channelDesc != ''">
+            and ci.channel_desc = #{channelInfo.channelDesc}
+        </if>
+        <if test="channelInfo.engineName != null and channelInfo.engineName != ''">
+            and ei.engine_name = #{channelInfo.engineName}
+        </if>
+
+        group by
+        ci.channel_name,
+        ci.assist_email,
+        ci.channel_desc,
+        ci.channel_id ,
+        ci.channel_off_on ,
+        ci.channel_type ,
+        ci.channel_url ,
+        ci.cookie_domain ,
+        ci.cookie_enable ,
+        ci.create_time ,
+        ci.day_max ,
+        ci.email ,
+        ci.home_url ,
+        ci.login_url ,
+        ci.modify_time ,
+        ci.`password` ,
+        ci.phone ,
+        ci.title_limit ,
+        ci.gain_status,
+        ci.username
+    </select>
+
+    <select id="queryChannelInfoByDownloadName" resultType="map">
+        select ci.channel_name,ci.channel_type,ci.channel_off_on,ci.cookie_enable from channel_info ci
+        inner join upload_info ui on ci.channel_name = ui.channel_name
+        where ui.download_name=#{downloadName} order by ui.create_time desc
+    </select>
+
+    <select id="statistics" resultType="map">
+        select channel_type ,count(channel_type) as channel_count from channel_info
+        where channel_off_on = 'on' group by channel_type
+    </select>
+
+
+
+
+
+
+
+</mapper>
+

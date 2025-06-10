@@ -1,0 +1,11 @@
+package cc.mrbird.febs.hope.dao;
+
+import cc.mrbird.febs.hope.domain.EngineInfo;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+/**
+ * @author fanta
+ */
+public interface EngineInfoMapper extends BaseMapper<EngineInfo> {
+
+}
