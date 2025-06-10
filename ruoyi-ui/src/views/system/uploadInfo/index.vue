@@ -427,9 +427,33 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const uploadId = row.uploadId || this.ids
+      const uploadId = row.uploadId || this.ids;
       getUploadInfo(uploadId).then(response => {
         this.form = response.data;
+        // Ensure download and channel options are populated
+        this.getDownloadOptions();
+        this.getChannelOptions();
+        
+        // Set the download name and path directly from the options
+        if (this.form.downloadName && this.downloadOptions.length > 0) {
+          const selectedDownload = this.downloadOptions.find(
+            (item) => item.downloadName === this.form.downloadName
+          );
+          if (selectedDownload) {
+            this.form.downloadName = selectedDownload.downloadName;
+            this.form.uploadPath = selectedDownload.downloadPath;
+          }
+        }
+        
+        if (this.form.channelName && this.channelOptions.length > 0) {
+          const selectedChannel = this.channelOptions.find(
+            (item) => item === this.form.channelName
+          );
+          if (selectedChannel) {
+            this.form.channelName = selectedChannel;
+          }
+        }
+        
         this.open = true;
         this.title = "修改上传管理";
       });
@@ -449,12 +473,20 @@ export default {
           }
           
           // 验证频道名称是否存在于选项中
-          if (this.form.channelName && this.channelOptions.indexOf(this.form.channelName) === -1) {
+          const selectedChannel = this.channelOptions.find(
+            (item) => item === this.form.channelName
+          );
+          if (this.form.channelName && !selectedChannel) {
             this.$modal.msgError("频道名称不存在或未启用，请从下拉列表中选择有效的频道名称");
+            // Force refresh channel options to help user resolve the issue
+            this.getChannelOptions();
             return;
           }
           // 验证下载名称是否存在于选项中
-          if (this.form.downloadName && this.downloadOptions.indexOf(this.form.downloadName) === -1) {
+          const selectedDownload = this.downloadOptions.find(
+            (item) => item.downloadName === this.form.downloadName
+          );
+          if (this.form.downloadName && !selectedDownload) {
             this.$modal.msgError("下载名称不存在或未启用，请从下拉列表中选择有效的下载名称");
             return;
           }
