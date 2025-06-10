@@ -118,20 +118,21 @@
                 <span>{{ form.downloadName }}</span>
               </template>
               <template v-else>
-                <el-select 
-                  v-model="form.downloadName" 
-                  placeholder="请选择下载名称" 
-                  filterable 
-                  clearable 
+                <el-select
+                  v-model="form.downloadName"
+                  placeholder="请选择下载名称"
+                  filterable
+                  clearable
                   remote
                   :remote-method="remoteSearchDownload"
                   :loading="downloadLoading"
-                  style="width: 100%">
+                  style="width: 100%"
+                  @change="handleDownloadNameChange">
                   <el-option
                     v-for="download in downloadOptions"
-                    :key="download"
-                    :label="download"
-                    :value="download"
+                    :key="download.downloadName"
+                    :label="download.downloadName"
+                    :value="download.downloadName"
                   />
                 </el-select>
               </template>
@@ -524,6 +525,13 @@ export default {
         });
       } else {
         this.getDownloadOptions();
+      }
+    },
+    /** 处理下载名称选择变化 */
+    handleDownloadNameChange(value) {
+      const selectedDownload = this.downloadOptions.find(item => item.downloadName === value);
+      if (selectedDownload) {
+        this.form.uploadPath = selectedDownload.downloadPath;
       }
     },
     /** 切换开关状态 */
