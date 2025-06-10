@@ -64,7 +64,7 @@ public interface IDownloadInfoService
      * 
      * @param downloadName 下载名称关键字
      * @param limit 限制返回数量
-     * @return 符合条件的下载名称列表
+     * @return 符合条件的下载名称及路径信息列表
      */
-    public List<String> searchDownloadNames(String downloadName, int limit);
+    public List<DownloadInfo> searchDownloadNames(String downloadName, int limit);
 }

@@ -98,11 +98,11 @@ public class DownloadInfoServiceImpl implements IDownloadInfoService
      *
      * @param downloadName 下载名称关键字
      * @param limit 限制返回数量
-     * @return 符合条件的下载名称列表
+     * @return 符合条件的下载信息列表
      */
     @Override
-    public List<String> searchDownloadNames(String downloadName, int limit) {
-        // 直接调用Mapper方法获取下载名称列表
+    public List<DownloadInfo> searchDownloadNames(String downloadName, int limit) {
+        // 直接调用Mapper方法获取下载信息列表
         return downloadInfoMapper.searchDownloadNamesFuzzy(downloadName, limit);
     }
 }

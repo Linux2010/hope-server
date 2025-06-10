@@ -123,7 +123,7 @@ public class DownloadInfoController extends BaseController
     @GetMapping("/searchNames")
     public AjaxResult searchDownloadNames(@RequestParam(value = "downloadName", required = false) String downloadName)
     {
-        List<String> downloadNames = downloadInfoService.searchDownloadNames(downloadName, 5);
-        return success(downloadNames);
+        List<DownloadInfo> downloadInfos = downloadInfoService.searchDownloadNames(downloadName, 5);
+        return success(downloadInfos);
     }
 }

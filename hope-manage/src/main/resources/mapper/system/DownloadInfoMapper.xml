@@ -137,8 +137,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <!-- 模糊搜索下载名称 -->
-    <select id="searchDownloadNamesFuzzy" resultType="String">
-        SELECT download_name
+    <select id="searchDownloadNamesFuzzy" resultMap="DownloadInfoResult">
+        SELECT *
         FROM download_info 
         <where>
             <!-- 模糊匹配下载名称 -->

@@ -65,7 +65,7 @@ public interface DownloadInfoMapper
      * 
      * @param downloadName 下载名称关键字
      * @param limit 限制返回数量
-     * @return 符合条件的下载名称列表
+     * @return 符合条件的下载信息列表
      */
-    public List<String> searchDownloadNamesFuzzy(@Param("downloadName") String downloadName, @Param("limit") int limit);
+    public List<DownloadInfo> searchDownloadNamesFuzzy(@Param("downloadName") String downloadName, @Param("limit") int limit);
 }
