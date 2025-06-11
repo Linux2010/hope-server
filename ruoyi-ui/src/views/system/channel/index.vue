@@ -457,7 +457,7 @@
 import { listInfo, getInfo, delInfo, addInfo, updateInfo, listEngine, listAllEngines, openBack } from "@/api/system/channel";
 
 export default {
-  name: "Info",
+  name: "Channel",
   dicts: ['hope_channel_off_on', 'hope_cookie_enable', 'hope_gain_status', 'channel_type'],
   data() {
     return {
@@ -510,8 +510,7 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-      },
+      rules: {},
       formStyle: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -531,10 +530,11 @@ export default {
     getList() {
       this.loading = true;
       listInfo(this.queryParams).then(response => {
-        this.infoList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+          this.infoList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 取消按钮
     cancel() {

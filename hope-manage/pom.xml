@@ -9,7 +9,7 @@
         <version>3.9.0</version>
     </parent>
 
-    <groupId>ink.kylin</groupId>
+    <groupId>com.ruoyi</groupId>
     <artifactId>hope-manage</artifactId>
 
     <properties>

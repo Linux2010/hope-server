@@ -61,9 +61,9 @@
 
 
         <dependency>
-            <groupId>ink.kylin</groupId>
+            <groupId>com.ruoyi</groupId>
             <artifactId>hope-manage</artifactId>
-            <version>3.8.9</version>
+            <version>3.9.0</version>
         </dependency>
 
     </dependencies>
