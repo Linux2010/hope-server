@@ -154,3 +154,10 @@ hope:
       loginUrl: https://accounts.google.com/signin/v2/identifier
       homeUrl: https://www.youtube.com/account
       cookieDomain: .youtube.com
+  download:
+    bili:
+      shellPath: shell/BBDown
+      afterShellPath: shell/cover_pic.sh
+    youtube:
+      shellPath: shell/you-download.sh
+      afterShellPath: shell/cover_pic.sh

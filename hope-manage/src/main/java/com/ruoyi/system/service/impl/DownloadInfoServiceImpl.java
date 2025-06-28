@@ -2,6 +2,7 @@ package com.ruoyi.system.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.system.config.DownloadConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.DownloadInfoMapper;
@@ -19,6 +20,9 @@ public class DownloadInfoServiceImpl implements IDownloadInfoService
 {
     @Autowired
     private DownloadInfoMapper downloadInfoMapper;
+
+    @Autowired
+    private DownloadConfig downloadConfig;
 
     /**
      * 查询下载管理
@@ -54,7 +58,24 @@ public class DownloadInfoServiceImpl implements IDownloadInfoService
     public int insertDownloadInfo(DownloadInfo downloadInfo)
     {
         downloadInfo.setCreateTime(DateUtils.getNowDate());
+        downloadInfo.setUpdateTime(DateUtils.getNowDate());
+        this.setDownloadConfig(downloadInfo);
         return downloadInfoMapper.insertDownloadInfo(downloadInfo);
+    }
+
+    private void setDownloadConfig(DownloadInfo downloadInfo) {
+        if (null == downloadConfig) {
+            throw new RuntimeException("请先配置下载参数");
+        }
+        switch (downloadInfo.getDownloadType()) {
+            case "youtube":
+                downloadInfo.setShellPath(downloadConfig.getYoutubeShellPath());
+                downloadInfo.setAfterShellPath(downloadConfig.getYoutubeAfterShellPath());
+                break;
+            case "bili":
+                downloadInfo.setShellPath(downloadConfig.getBiliShellPath());
+                downloadInfo.setAfterShellPath(downloadConfig.getBiliAfterShellPath());
+        }
     }
 
     /**
@@ -66,6 +87,8 @@ public class DownloadInfoServiceImpl implements IDownloadInfoService
     @Override
     public int updateDownloadInfo(DownloadInfo downloadInfo)
     {
+        downloadInfo.setUpdateTime(DateUtils.getNowDate());
+        this.setDownloadConfig(downloadInfo);
         return downloadInfoMapper.updateDownloadInfo(downloadInfo);
     }
 
