@@ -144,7 +144,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -254,28 +254,6 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="15">
-          <el-col :span="12">
-            <el-form-item label="脚本" prop="shellPath">
-              <template v-if="isView">
-                <span>{{ form.shellPath }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.shellPath" placeholder="请输入脚本" />
-              </template>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="存储路径" prop="downloadPath">
-              <template v-if="isView">
-                <span>{{ form.downloadPath }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.downloadPath" placeholder="请输入存储路径" />
-              </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
 
         <el-row :gutter="15">
           <el-col :span="12">
@@ -312,12 +290,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="后置处理" prop="afterShellPath">
+            <el-form-item label="存储路径" prop="downloadPath">
               <template v-if="isView">
-                <span>{{ form.afterShellPath }}</span>
+                <span>{{ form.downloadPath }}</span>
               </template>
               <template v-else>
-                <el-input v-model="form.afterShellPath" placeholder="请输入后置处理" />
+                <el-input v-model="form.downloadPath" placeholder="请输入存储路径" />
               </template>
             </el-form-item>
           </el-col>
