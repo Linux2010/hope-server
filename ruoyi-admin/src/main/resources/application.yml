@@ -138,3 +138,19 @@ xss:
 hope:
   machine-room-id: 99
   engine-shell-path: /Users/kylin/hope-install/hope-engine/shell
+  channel:
+    xigua:
+      titleLimit: 30
+      loginUrl: https://mp.toutiao.com/profile_v4/index
+      homeUrl: https://mp.toutiao.com/profile_v4/index
+      cookieDomain: .toutiao.com
+    bili:
+      titleLimit: 80
+      loginUrl: https://member.bilibili.com/platform/home
+      homeUrl: https://member.bilibili.com/platform/home
+      cookieDomain: .bilibili.com  
+    youtube:
+      titleLimit: 99
+      loginUrl: https://accounts.google.com/signin/v2/identifier
+      homeUrl: https://www.youtube.com/account
+      cookieDomain: .youtube.com

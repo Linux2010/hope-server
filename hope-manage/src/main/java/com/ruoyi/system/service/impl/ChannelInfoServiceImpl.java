@@ -1,6 +1,7 @@
 package com.ruoyi.system.service.impl;
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.system.config.ChannelConfig;
 import com.ruoyi.system.domain.ChannelInfo;
 import com.ruoyi.system.mapper.ChannelInfoMapper;
 import com.ruoyi.system.service.IChannelInfoService;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 【下载管理】Service业务层处理
@@ -19,10 +19,13 @@ import java.util.stream.Collectors;
  * @date 2025-01-11
  */
 @Service
-public class ChannelInfoServiceImpl implements IChannelInfoService
-{
+public class ChannelInfoServiceImpl implements IChannelInfoService{
+    
     @Autowired
     private ChannelInfoMapper channelInfoMapper;
+
+    @Autowired
+    private ChannelConfig channelConfig;
 
     /**
      * 查询【下载管理】
@@ -58,6 +61,7 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
     public int insertChannelInfo(ChannelInfo channelInfo)
     {
         channelInfo.setCreateTime(DateUtils.getNowDate());
+        setChannelConfig(channelInfo);
         return channelInfoMapper.insertChannelInfo(channelInfo);
     }
 
@@ -70,6 +74,8 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
     @Override
     public int updateChannelInfo(ChannelInfo channelInfo)
     {
+        channelInfo.setUpdateTime(DateUtils.getNowDate());
+        setChannelConfig(channelInfo);
         return channelInfoMapper.updateChannelInfo(channelInfo);
     }
 
@@ -129,5 +135,31 @@ public class ChannelInfoServiceImpl implements IChannelInfoService
         }
         ShellUtils.log.info("execCmd: [{}]", cmd);
         ShellUtils.execCmd(cmd);
+    }
+
+    private void setChannelConfig(ChannelInfo channelInfo) {
+        if (null == channelConfig) {
+            throw new RuntimeException("请先配置渠道参数");
+        }
+        switch (channelInfo.getChannelType()) {
+            case "youtube":
+                channelInfo.setCookieDomain(channelConfig.getYoutubeCookieDomain());
+                channelInfo.setTitleLimit(channelConfig.getYoutubeTitleLimit());
+                channelInfo.setLoginUrl(channelConfig.getYoutubeLoginUrl());
+                channelInfo.setHomeUrl(channelConfig.getYoutubeHomeUrl());
+                break;
+            case "bili":
+                channelInfo.setCookieDomain(channelConfig.getBiliCookieDomain());
+                channelInfo.setTitleLimit(channelConfig.getBiliTitleLimit());
+                channelInfo.setLoginUrl(channelConfig.getBiliLoginUrl());
+                channelInfo.setHomeUrl(channelConfig.getBiliHomeUrl());
+                break;
+            case "xigua":
+                channelInfo.setCookieDomain(channelConfig.getXiguaCookieDomain());
+                channelInfo.setTitleLimit(channelConfig.getXiguaTitleLimit());
+                channelInfo.setLoginUrl(channelConfig.getXiguaLoginUrl());
+                channelInfo.setHomeUrl(channelConfig.getXiguaHomeUrl());
+                break;
+        }
     }
 }

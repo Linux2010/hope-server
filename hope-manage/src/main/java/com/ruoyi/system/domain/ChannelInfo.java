@@ -121,6 +121,58 @@ public class ChannelInfo extends BaseEntity
     @Excel(name = "youtube是否需要加工标识，0需要视频加工处理，1不需要视频加工处理")
     private Long processStatus;
 
+    /**
+     * 系统预设配置
+     */
+    public static class ChannelSystemConfig {
+        private String titleLimit;
+        private String loginUrl;
+        private String homeUrl;
+        private String cookieDomain;
+
+        public String getTitleLimit() {
+            return titleLimit;
+        }
+
+        public void setTitleLimit(String titleLimit) {
+            this.titleLimit = titleLimit;
+        }
+
+        public String getLoginUrl() {
+            return loginUrl;
+        }
+
+        public void setLoginUrl(String loginUrl) {
+            this.loginUrl = loginUrl;
+        }
+
+        public String getHomeUrl() {
+            return homeUrl;
+        }
+
+        public void setHomeUrl(String homeUrl) {
+            this.homeUrl = homeUrl;
+        }
+
+        public String getCookieDomain() {
+            return cookieDomain;
+        }
+
+        public void setCookieDomain(String cookieDomain) {
+            this.cookieDomain = cookieDomain;
+        }
+        
+        @Override
+        public String toString() {
+            return "ChannelSystemConfig{" +
+                    "titleLimit='" + titleLimit + '\'' +
+                    ", loginUrl='" + loginUrl + '\'' +
+                    ", homeUrl='" + homeUrl + '\'' +
+                    ", cookieDomain='" + cookieDomain + '\'' +
+                    '}';
+        }
+    }
+
     public void setChannelId(Long channelId) 
     {
         this.channelId = channelId;

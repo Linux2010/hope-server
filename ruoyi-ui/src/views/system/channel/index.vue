@@ -206,7 +206,7 @@
                 <dict-tag :options="dict.type.channel_type" :value="form.channelType"/>
               </template>
               <template v-else>
-                <el-select v-model="form.channelType" placeholder="请选择频道类型" clearable style="width: 100%">
+                <el-select v-model="form.channelType" placeholder="请选择频道类型" clearable style="width: 100%" @change="handleEngineChange">
                   <el-option
                     v-for="dict in dict.type.channel_type"
                     :key="dict.value"
@@ -273,6 +273,7 @@
           </el-col>
         </el-row>
 
+        <!-- 单行输入框，每行两个 -->
         <el-row :gutter="15">
           <el-col :span="12">
             <el-form-item label="账号到期" prop="accDue">
@@ -374,53 +375,6 @@
 
         <el-row :gutter="15">
           <el-col :span="12">
-            <el-form-item label="标题上限" prop="titleLimit">
-              <template v-if="isView">
-                <span>{{ form.titleLimit }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.titleLimit" placeholder="请输入标题上限" />
-              </template>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-        <el-form-item label="登录地址" prop="loginUrl">
-          <template v-if="isView">
-            <el-link :href="form.loginUrl" target="_blank" :underline="false" style="color:#409EFF;">{{ form.loginUrl }}</el-link>
-          </template>
-              <template v-else>
-                <el-input v-model="form.loginUrl" placeholder="请输入登录地址" />
-              </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="15">
-          <el-col :span="12">
-        <el-form-item label="主页地址" prop="homeUrl">
-          <template v-if="isView">
-            <el-link :href="form.homeUrl" target="_blank" :underline="false" style="color:#409EFF;">{{ form.homeUrl }}</el-link>
-          </template>
-          <template v-else>
-            <el-input v-model="form.homeUrl" placeholder="请输入主页地址" />
-          </template>
-        </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="Cookie域名" prop="cookieDomain">
-              <template v-if="isView">
-                <span>{{ form.cookieDomain }}</span>
-              </template>
-              <template v-else>
-                <el-input v-model="form.cookieDomain" placeholder="请输入Cookie域名" />
-              </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <!-- 多行输入框，独占一行 -->
-        <el-row :gutter="15">
-          <el-col :span="24">
             <el-form-item label="描述" prop="channelDesc">
               <template v-if="isView">
                 <span>{{ form.channelDesc }}</span>
